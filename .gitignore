@@ -1,25 +1,27 @@
 *.rbc
 capybara-*.html
-.rspec
-/db/*.sqlite3
-/db/*.sqlite3-journal
-/db/*.sqlite3-[0-9]*
-/public/system
+/spec/rails_app/db/*.sqlite3
+/spec/rails_app/db/*.sqlite3-journal
+/spec/rails_app/db/*.sqlite3-[0-9]*
+/spec/rails_app/public/system
 /coverage/
-/spec/tmp
+/tmp/
+/spec/rails_app/spec/tmp
 *.orig
 rerun.txt
 pickle-email-*.html
+/Gemfile.lock
+/gemfiles/Gemfile*.lock
 
 # Ignore all logfiles and tempfiles.
-/log/*
-/tmp/*
-!/log/.keep
-!/tmp/.keep
+/spec/rails_app/log/*
+/spec/rails_app/tmp/*
+!/spec/rails_app/log/.keep
+!/spec/rails_app/tmp/.keep
 
 # TODO Comment out this rule if you are OK with secrets being uploaded to the repo
-config/initializers/secret_token.rb
-config/master.key
+/spec/rails_app/config/initializers/secret_token.rb
+/spec/rails_app/config/master.key
 
 # Only include if you have production secrets in this file, which is no longer a Rails default
 # config/secrets.yml
@@ -31,6 +33,7 @@ config/master.key
 ## Environment normalization:
 /.bundle
 /vendor/bundle
+/spec/rails_app/vendor/bundle
 
 # these should all be checked in to normalize the environment:
 # Gemfile.lock, .ruby-version, .ruby-gemset
@@ -50,18 +53,34 @@ bower.json
 .byebug_history
 
 # Ignore node_modules
-node_modules/
+/node_modules/
+/spec/rails_app/node_modules/
 
 # Ignore precompiled javascript packs
-/public/packs
-/public/packs-test
-/public/assets
+/spec/rails_app/public/packs
+/spec/rails_app/public/packs-test
+/spec/rails_app/public/assets
 
 # Ignore yarn files
-/yarn-error.log
+/spec/rails_app/yarn.lock
+/spec/rails_app/yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+/package-lock.json
 
 # Ignore uploaded files in development
-/storage/*
-!/storage/.keep
+/spec/rails_app/storage/*
+!/spec/rails_app//storage/.keep
+
+## Documentation cache and generated files:
+/.yardoc/
+/_yardoc/
+/doc/
+/rdoc/
+
+# Security files for testing
+/spec/rails_app/config/initializers/aws.rb
+
+# Compiled Amazon Chime SDK as single JavaScript file
+/spec/rails_app/app/assets/javascripts/amazon-chime-sdk.min.js
+/spec/rails_app/app/assets/javascripts/amazon-chime-sdk.min.js.map
