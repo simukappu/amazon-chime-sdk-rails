@@ -1,0 +1,136 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Meeting by Amazon Chime SDK</h1>
+
+<p><%= link_to("Show Meetings", meeting_resources_path) %></p>
+
+<% if @meeting %>
+  <strong>Meeting</strong>
+  <p>
+    Meeting ID : <%= link_to(@meeting[:Meeting][:MeetingId], meeting_resource_path(@meeting[:Meeting][:MeetingId])) %><br>
+    External Meeting ID : <%= @meeting[:Meeting][:ExternalMeetingId] %><br>
+    Media Region : <%= @meeting[:Meeting][:MediaRegion] %>
+  </p>
+
+  <div id="meeting" meeting-data="<%= @meeting.to_json %>"></div>
+<% end %>
+
+<% if @attendee %>
+  <strong>Attendee</strong>
+  <p>
+    Attendee ID : <%= link_to(@attendee[:Attendee][:AttendeeId], attendee_resource_path(@meeting[:Meeting][:MeetingId], @attendee[:Attendee][:AttendeeId])) %><br>
+    External User ID : <%= @attendee[:Attendee][:ExternalUserId] %><br>
+    Application Attendee Name : <%= application_attendee_name(@attendee) %>
+  </p>
+
+  <div id="status">
+    <strong>Status</strong>
+    <div id="meeting-status">
+      <p>Meeting : Offline <input type="button" value="Join a meeting" onclick="join()"></p>
+    </div>
+    <div id="attendee-status"></div>
+  </div>
+
+  <audio id="audio"></audio>
+
+  <div id="attendee" attendee-data="<%= @attendee.to_json %>"></div>
+  <div id="attendee-resources-path" attendee-resources-path-data="<%= attendee_resources_path(@meeting[:Meeting][:MeetingId]) %>"></div>
+<% end %>
+
+<%= javascript_include_tag "amazon-chime-sdk.min.js" %>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script defer>
+  // This is a very simple script as a template view using Amazon Chime SDK.
+  // This script only provides simple audio meeting function.
+  // See the following guide to develop your own video meeting application.
+  // https://github.com/aws/amazon-chime-sdk-js
+  // https://aws.github.io/amazon-chime-sdk-js/modules/gettingstarted.html
+
+  // Customize this function to extract attendee name to show
+  function showApplicationUserName(attendee) {
+    // return attendee.Attendee.AttendeeId;
+    return `${attendee.Attendee.ApplicationMetadata.User.name} (${attendee.Attendee.AttendeeId})`;
+  }
+
+  const meeting = JSON.parse(document.getElementById('meeting').getAttribute('meeting-data'));
+  const attendee = JSON.parse(document.getElementById('attendee').getAttribute('attendee-data'));
+  const attendeeResourcesPath = document.getElementById('attendee-resources-path').getAttribute('attendee-resources-path-data');
+  const audioOutputElement = document.getElementById('audio');
+
+  const logger = new ChimeSDK.ConsoleLogger('ChimeMeetingLogs', ChimeSDK.LogLevel.INFO);
+  const deviceController = new ChimeSDK.DefaultDeviceController(logger);
+  const configuration = new ChimeSDK.MeetingSessionConfiguration(meeting, attendee);
+  const meetingSession = new ChimeSDK.DefaultMeetingSession(configuration, logger, deviceController);
+
+  const attendeeApi = axios.create({
+    baseURL: `${attendeeResourcesPath}/`
+  });
+
+  async function join() {
+    try {
+      const audioInputDevices = await meetingSession.audioVideo.listAudioInputDevices();
+      const audioOutputDevices = await meetingSession.audioVideo.listAudioOutputDevices();
+      await meetingSession.audioVideo.chooseAudioInputDevice(audioInputDevices[0].deviceId);
+      await meetingSession.audioVideo.chooseAudioOutputDevice(audioOutputDevices[0].deviceId);
+    } catch (error) {
+      // handle error - unable to acquire audio device perhaps due to permissions blocking
+      console.log(error);
+    }
+    meetingSession.audioVideo.bindAudioElement(audioOutputElement);
+    meetingSession.audioVideo.start();
+    document.getElementById("meeting-status").innerHTML = '<p>Meeting : Online <input type="button" value="Leave a meeting" onclick="leave()"></p><div id="audio-status"></div>';
+    document.getElementById("audio-status").innerHTML = '<p>Audio : Active <input type="button" value="Mute" onclick="mute()"></p>';
+    document.getElementById("attendee-status").innerHTML = '<strong>Present Attendees</strong>';
+    parepareAttendeeStatus();
+  }
+
+  function leave() {
+    meetingSession.audioVideo.stop();
+    document.getElementById("meeting-status").innerHTML = '<p>Meeting : Offline <input type="button" value="Join a meeting" onclick="join()">';
+    document.getElementById("attendee-status").innerHTML = '';
+  }
+
+  function mute() {
+    meetingSession.audioVideo.realtimeMuteLocalAudio();
+    document.getElementById("audio-status").innerHTML = '<p>Audio : Muted <input type="button" value="Unmute" onclick="unmute()"></p>';
+  }
+
+  function unmute() {
+    const unmuted = meetingSession.audioVideo.realtimeUnmuteLocalAudio();
+    if (unmuted) {
+      document.getElementById("audio-status").innerHTML = '<p>Audio : Active <input type="button" value="Mute" onclick="mute()"></p>';
+    } else {
+      console.log('You cannot unmute yourself');
+    }
+  }
+
+  function parepareAttendeeStatus() {
+    const presentAttendeeMap = {};
+    const callback = (presentAttendeeId, present) => {
+      if (present) {
+        attendeeApi.get(presentAttendeeId)
+          .then(response => {
+            presentAttendeeMap[presentAttendeeId] = response.data;
+            updateAttendeeStatus(presentAttendeeMap);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } else {
+        delete presentAttendeeMap[presentAttendeeId]
+        updateAttendeeStatus(presentAttendeeMap);
+      }
+    };
+    meetingSession.audioVideo.realtimeSubscribeToAttendeeIdPresence(callback);
+  }
+
+  function updateAttendeeStatus(presentAttendeeMap) {
+    presentAttendees = "<strong>Present Attendees</strong><ul>";
+    Object.values(presentAttendeeMap).forEach(attendee => {
+      presentAttendees = presentAttendees + `<li>${showApplicationUserName(attendee)}</li>`
+    });
+    presentAttendees = presentAttendees + '</ul>'
+    document.getElementById("attendee-status").innerHTML = presentAttendees;
+  }
+</script>
