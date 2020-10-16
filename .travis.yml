@@ -1,0 +1,42 @@
+language: ruby
+
+rvm:
+  - 2.7.1
+  # - 2.6.6
+
+gemfile:
+  # - gemfiles/Gemfile.rails-5.0
+  # - gemfiles/Gemfile.rails-5.1
+  # - gemfiles/Gemfile.rails-5.2
+  - gemfiles/Gemfile.rails-6.0
+
+matrix:
+  include:
+    - rvm: ruby-head
+      gemfile: Gemfile
+  allow_failures:
+    - rvm: ruby-head
+  fast_finish: true
+
+services:
+  - mysql
+  - postgresql
+  - mongodb
+
+sudo: false
+
+cache: bundler
+
+before_install:
+  - gem install bundler
+
+install:
+  - bundle install
+
+before_script:
+  - bundle update
+
+script: bundle exec rspec
+
+notifications:
+  email: true
