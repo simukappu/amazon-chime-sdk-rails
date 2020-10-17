@@ -1,0 +1,35 @@
+===============================================================================
+
+Routing setup you must do manually if you haven't yet:
+
+  Rails.application.routes.draw do
+    resources :meetings, only: [:index, :show, :create, :destroy] do
+      resources :meeting_attendees, as: :attendees, path: :attendees, only: [:index, :show]
+    end
+  end
+
+Examples:
+
+If you generated controllers with room as parent resource by --parent option, setup routes like this:
+
+  Rails.application.routes.draw do
+    resources :rooms do
+      resources :meetings, only: [:index, :show, :create, :destroy] do
+        resources :meeting_attendees, as: :attendees, path: :attendees, only: [:index, :show]
+      end
+    end
+  end
+
+If you generated controllers for Rails API with api as namespace by --namespace option, setup routes like this:
+
+  Rails.application.routes.draw do
+    namespace :api do
+      scope :"v1" do
+        resources :meetings, defaults: { format: :json }, only: [:index, :show, :create, :destroy] do
+          resources :meeting_attendees, as: :attendees, path: :attendees, only: [:index, :show, :create, :destroy]
+        end
+      end
+    end
+  end
+
+===============================================================================

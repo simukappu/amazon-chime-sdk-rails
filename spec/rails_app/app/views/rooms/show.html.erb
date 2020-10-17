@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @room.name %>
+</p>
+
+<p>
+  <strong>Private Meeting:</strong>
+  <p><%= link_to 'Show Meetings', room_meetings_path(@room) %></p>
+  <p>
+    Create Meeting
+    <%= link_to 'GET', room_meetings_path(@room, create_meeting: true) %>
+    <%= link_to 'POST', room_meetings_path(@room), method: :post %>
+  </p>
+</p>
+
+<p>
+  <strong>Members:</strong>
+  <table>
+    <tbody>
+      <% @room.entries.each do |entry| %>
+        <tr>
+          <td><%= entry.user.name %></td>
+          <td><%= link_to 'Remove', [@room, entry], method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</p>
+
+<p>
+  <strong>Add members:</strong>
+  <%= form_for [@room, @entry] do |f| %>
+    <%= f.hidden_field :room_id, value: @room.id %>
+    <%= f.collection_select :user_id, User.all, :id, :name %>
+    <%= f.submit "Add" %>
+  <% end %>
+</p>
+
+<%= link_to 'Edit', edit_room_path(@room) %> |
+<%= link_to 'Back', rooms_path %>

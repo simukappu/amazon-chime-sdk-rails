@@ -1,3 +1,4 @@
+*.gem
 *.rbc
 capybara-*.html
 /spec/rails_app/db/*.sqlite3
@@ -33,6 +34,7 @@ pickle-email-*.html
 ## Environment normalization:
 /.bundle
 /vendor/bundle
+/gemfiles/vendor/bundle
 /spec/rails_app/vendor/bundle
 
 # these should all be checked in to normalize the environment:
