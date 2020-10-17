@@ -9,9 +9,13 @@ Bundler.require(*Rails.groups)
 module RailsApp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    if Rails.version.to_f >= 5.1
+      config.load_defaults Rails.version.to_f
+    end
 
-    # Allow requests to www.example.com for RSpec
-    config.hosts << 'www.example.com'
+    if Rails::VERSION::MAJOR >= 6
+      # Allow requests to www.example.com for RSpec
+      config.hosts << 'www.example.com'
+    end
   end
 end
