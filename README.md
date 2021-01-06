@@ -1100,6 +1100,7 @@ $ cd spec/rails_app
 $ bin/rake db:migrate
 $ bin/rake db:seed
 $ bin/rails g chime_sdk:js
+$ npm install
 $ bin/rails server
 ```
 
