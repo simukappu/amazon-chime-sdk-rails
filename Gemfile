@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 # Bundle Rails
-gem 'rails', '~> 6.0.0'
+gem 'rails', '~> 6.1.1'
 
 gem 'sqlite3'
 gem 'puma'
