@@ -75,9 +75,17 @@
       await meetingSession.audioVideo.chooseAudioOutputDevice(audioOutputDevices[0].deviceId);
     } catch (error) {
       // handle error - unable to acquire audio device perhaps due to permissions blocking
-      console.log(error);
+      if (error instanceof PermissionDeniedError) {
+        console.error('Permission denied', error);
+      } else {
+        console.error(error);
+      }
     }
-    meetingSession.audioVideo.bindAudioElement(audioOutputElement);
+    try {
+      await meetingSession.audioVideo.bindAudioElement(audioOutputElement);
+    } catch (error) {
+      console.error('Failed to bind audio element', error);
+    }
     meetingSession.audioVideo.start();
     document.getElementById("meeting-status").innerHTML = '<p>Meeting : Online <input type="button" value="Leave a meeting" onclick="leave()"></p><div id="audio-status"></div>';
     document.getElementById("audio-status").innerHTML = '<p>Audio : Active <input type="button" value="Mute" onclick="mute()"></p>';

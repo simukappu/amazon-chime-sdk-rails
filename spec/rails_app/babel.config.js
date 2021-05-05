@@ -54,6 +54,12 @@ module.exports = function(api) {
         }
       ],
       [
+        '@babel/plugin-transform-modules-commonjs',
+        {
+          allowTopLevelThis: true
+        }
+      ],
+      [
         '@babel/plugin-transform-runtime',
         {
           helpers: false,

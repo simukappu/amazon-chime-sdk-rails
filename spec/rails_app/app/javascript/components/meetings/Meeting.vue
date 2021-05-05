@@ -121,10 +121,18 @@ export default {
         await this.meetingSession.audioVideo.chooseAudioOutputDevice(audioOutputDevices[0].deviceId);
       } catch (error) {
         // handle error - unable to acquire audio device perhaps due to permissions blocking
-        console.log(error);
+        if (error instanceof PermissionDeniedError) {
+          console.error('Permission denied', error);
+        } else {
+          console.error(error);
+        }
       }
       const audioOutputElement = document.getElementById('audio');
-      this.meetingSession.audioVideo.bindAudioElement(audioOutputElement);
+      try {
+        await this.meetingSession.audioVideo.bindAudioElement(audioOutputElement);
+      } catch (error) {
+        console.error('Failed to bind audio element', error);
+      }
       this.meetingSession.audioVideo.start();
       this.meetingOnline = true;
       this.parepareAttendeeStatus();
