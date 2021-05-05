@@ -12,14 +12,73 @@ describe ChimeSdk::Generators::JsGenerator, type: :generator do
 
   describe 'generating files' do
     context 'when npm is installed' do
-      before do
-        run_generator
+      context 'without specified amazon-chime-sdk-js version' do
+        before do
+          run_generator
+        end
+
+        # This test takes a long time. Skip it by xdescribe if you are developing the gem.
+        describe 'app/assets/javascripts/amazon-chime-sdk.min.js' do
+          subject { file('app/assets/javascripts/amazon-chime-sdk.min.js') }
+          it { is_expected.to exist }
+        end
       end
 
-      # This test takes a long time. Skip it by xdescribe if you are developing the gem.
-      describe 'app/assets/javascripts/amazon-chime-sdk.min.js' do
-        subject { file('app/assets/javascripts/amazon-chime-sdk.min.js') }
-        it { is_expected.to exist }
+      context 'with 1.3.0 as specified amazon-chime-sdk-js version' do
+        before do
+          run_generator %w(1.3.0)
+        end
+
+        # This test takes a long time. Skip it by xdescribe if you are developing the gem.
+        describe 'app/assets/javascripts/amazon-chime-sdk.min.js' do
+          subject { file('app/assets/javascripts/amazon-chime-sdk.min.js') }
+          it { is_expected.to exist }
+        end
+      end
+
+      context 'with 2.8.0 as specified amazon-chime-sdk-js version' do
+        before do
+          run_generator %w(2.8.0)
+        end
+
+        # This test takes a long time. Skip it by xdescribe if you are developing the gem.
+        describe 'app/assets/javascripts/amazon-chime-sdk.min.js' do
+          subject { file('app/assets/javascripts/amazon-chime-sdk.min.js') }
+          it { is_expected.to exist }
+        end
+      end
+
+      context 'with 1.3.1 as specified amazon-chime-sdk-js version' do
+        before do
+          run_generator %w(1.3.1)
+        end
+
+        describe 'app/assets/javascripts/amazon-chime-sdk.min.js' do
+          subject { file('app/assets/javascripts/amazon-chime-sdk.min.js') }
+          it { is_expected.not_to exist }
+        end
+      end
+
+      context 'with 1.2.0 as specified amazon-chime-sdk-js version' do
+        before do
+          run_generator %w(1.2.0)
+        end
+
+        describe 'app/assets/javascripts/amazon-chime-sdk.min.js' do
+          subject { file('app/assets/javascripts/amazon-chime-sdk.min.js') }
+          it { is_expected.not_to exist }
+        end
+      end
+
+      context 'with hoge as specified amazon-chime-sdk-js version' do
+        before do
+          run_generator %w(hoge)
+        end
+
+        describe 'app/assets/javascripts/amazon-chime-sdk.min.js' do
+          subject { file('app/assets/javascripts/amazon-chime-sdk.min.js') }
+          it { is_expected.not_to exist }
+        end
       end
     end
   end
