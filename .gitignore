@@ -68,7 +68,8 @@ bower.json
 /spec/rails_app/yarn-error.log
 yarn-debug.log*
 .yarn-integrity
-/package-lock.json
+package-lock.json
+/package.json
 
 # Ignore uploaded files in development
 /spec/rails_app/storage/*
