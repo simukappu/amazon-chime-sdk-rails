@@ -13,6 +13,7 @@ rerun.txt
 pickle-email-*.html
 /Gemfile.lock
 /gemfiles/Gemfile*.lock
+.ruby-version
 
 # Ignore all logfiles and tempfiles.
 /spec/rails_app/log/*
