@@ -24,9 +24,10 @@ describe ChimeSdk::Generators::JsGenerator, type: :generator do
         end
       end
 
-      context 'with 1.3.0 as specified amazon-chime-sdk-js version' do
+      # https://www.npmjs.com/package/amazon-chime-sdk-js
+      context 'with 1.0.0 as specified amazon-chime-sdk-js version' do
         before do
-          run_generator %w(1.3.0)
+          run_generator %w(1.0.0)
         end
 
         # This test takes a long time. Skip it by xdescribe if you are developing the gem.
@@ -36,9 +37,10 @@ describe ChimeSdk::Generators::JsGenerator, type: :generator do
         end
       end
 
-      context 'with 2.8.0 as specified amazon-chime-sdk-js version' do
+      # https://www.npmjs.com/package/amazon-chime-sdk-js
+      context 'with 2.24.0 as specified amazon-chime-sdk-js version' do
         before do
-          run_generator %w(2.8.0)
+          run_generator %w(2.24.0)
         end
 
         # This test takes a long time. Skip it by xdescribe if you are developing the gem.
@@ -48,10 +50,10 @@ describe ChimeSdk::Generators::JsGenerator, type: :generator do
         end
       end
 
-      context 'with 1.3.1 as specified amazon-chime-sdk-js version' do
-        before do
-          run_generator %w(1.3.1)
-        end
+      # https://www.npmjs.com/package/amazon-chime-sdk-js
+      context 'with 0.9.0 as specified amazon-chime-sdk-js version' do
+        subject { -> { run_generator %w(0.9.0) } }
+        it { is_expected.to raise_error(SystemExit) }
 
         describe 'app/assets/javascripts/amazon-chime-sdk.min.js' do
           subject { file('app/assets/javascripts/amazon-chime-sdk.min.js') }
@@ -59,10 +61,10 @@ describe ChimeSdk::Generators::JsGenerator, type: :generator do
         end
       end
 
+      # https://www.npmjs.com/package/amazon-chime-sdk-js
       context 'with 1.2.0 as specified amazon-chime-sdk-js version' do
-        before do
-          run_generator %w(1.2.0)
-        end
+        subject { -> { run_generator %w(1.2.0) } }
+        it { is_expected.to raise_error(SystemExit) }
 
         describe 'app/assets/javascripts/amazon-chime-sdk.min.js' do
           subject { file('app/assets/javascripts/amazon-chime-sdk.min.js') }
@@ -71,9 +73,8 @@ describe ChimeSdk::Generators::JsGenerator, type: :generator do
       end
 
       context 'with hoge as specified amazon-chime-sdk-js version' do
-        before do
-          run_generator %w(hoge)
-        end
+        subject { -> { run_generator %w(hoge) } }
+        it { is_expected.to raise_error(SystemExit) }
 
         describe 'app/assets/javascripts/amazon-chime-sdk.min.js' do
           subject { file('app/assets/javascripts/amazon-chime-sdk.min.js') }
