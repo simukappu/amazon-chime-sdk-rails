@@ -1,6 +1,6 @@
 # amazon-chime-sdk-rails
 
-[![Build Status](https://travis-ci.com/simukappu/amazon-chime-sdk-rails.svg?branch=master)](https://travis-ci.com/simukappu/amazon-chime-sdk-rails)
+[![Build Status](https://github.com/simukappu/amazon-chime-sdk-rails/actions/workflows/build.yml/badge.svg)](https://github.com/simukappu/amazon-chime-sdk-rails/actions/workflows/build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/simukappu/amazon-chime-sdk-rails/badge.svg?branch=master)](https://coveralls.io/github/simukappu/amazon-chime-sdk-rails?branch=master)
 [![Dependency](https://img.shields.io/depfu/simukappu/amazon-chime-sdk-rails.svg)](https://depfu.com/repos/simukappu/amazon-chime-sdk-rails)
 [![Inline Docs](http://inch-ci.org/github/simukappu/amazon-chime-sdk-rails.svg?branch=master)](http://inch-ci.org/github/simukappu/amazon-chime-sdk-rails)

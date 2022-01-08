@@ -1,0 +1,68 @@
+name: build
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!images'
+  pull_request:
+    branches:
+      - '**'
+      - '!images'
+
+env:
+  # https://nodejs.org/en/download/releases/
+  node-version: 16.13.1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        gemfile:
+          - gemfiles/Gemfile.rails-5.0
+          - gemfiles/Gemfile.rails-5.1
+          - gemfiles/Gemfile.rails-5.2
+          - gemfiles/Gemfile.rails-6.0
+          - gemfiles/Gemfile.rails-6.1
+          - Gemfile
+        include:
+          # https://www.ruby-lang.org/en/downloads
+          - gemfile: gemfiles/Gemfile.rails-5.0
+            ruby-version: 2.7.5
+          - gemfile: gemfiles/Gemfile.rails-5.1
+            ruby-version: 2.7.5
+          - gemfile: gemfiles/Gemfile.rails-5.2
+            ruby-version: 2.7.5
+          - gemfile: gemfiles/Gemfile.rails-6.0
+            ruby-version: 3.0.3
+          - gemfile: gemfiles/Gemfile.rails-6.1
+            ruby-version: 3.0.3
+          - gemfile: Gemfile
+            ruby-version: head
+            allow_failures: 'true'
+    env:
+      RAILS_ENV: test
+      BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.node-version }}
+      - name: Prepare test application
+        working-directory: ./spec/rails_app
+        run: |
+          yarn --check-files
+          bundle exec rails webpacker:compile
+          bundle exec rails g chime_sdk:js
+      - name: Run tests with RSpec
+        run: bundle exec rspec
+        continue-on-error: ${{ matrix.allow_failures == 'true' }}
