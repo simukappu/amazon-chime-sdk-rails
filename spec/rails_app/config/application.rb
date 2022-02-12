@@ -16,6 +16,7 @@ module RailsApp
     if Rails::VERSION::MAJOR >= 6
       # Allow requests to www.example.com for RSpec
       config.hosts << 'www.example.com'
+      config.hosts << "localhost"
     end
   end
 end
