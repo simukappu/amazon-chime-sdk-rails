@@ -1,0 +1,31 @@
+source 'https://rubygems.org'
+
+gemspec path: '../'
+
+# Bundle Rails
+gem 'rails', '~> 7.0.0'
+# https://github.com/lynndylanhurley/devise_token_auth/pull/1517
+gem 'devise_token_auth', git: 'https://github.com/lynndylanhurley/devise_token_auth.git'
+# Tentative measure for 'check_for_activated_spec!' with default gem in Ruby 3.0.3
+gem 'digest', '3.0.0'
+gem 'io-wait', '0.2.0'
+
+gem 'sqlite3'
+gem 'puma'
+gem 'sass-rails'
+gem 'webpacker'
+gem 'turbolinks'
+gem 'jbuilder'
+gem 'sprockets-rails'
+
+group :development do
+  gem 'web-console'
+  gem 'listen'
+  gem 'spring'
+  gem 'spring-watcher-listen', git: 'https://github.com/rails/spring-watcher-listen.git'
+end
+
+group :test do
+  # gem 'coveralls', require: false
+  gem 'coveralls_reborn', require: false
+end
