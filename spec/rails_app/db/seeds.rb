@@ -29,7 +29,7 @@ puts "* Reset sequences for primary keys"
 end
 puts "* Created #{User.count} user records"
 
-room = Room.create
+room = Room.create(name: 'Private Room 1')
 puts "* Created #{Room.count} room records"
 
 ['Ichiro', 'Stephen'].each do |name|
