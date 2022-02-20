@@ -18,7 +18,7 @@ module ChimeSdk
         #   @param [Hash] params Request parameter options
         #   @option params [String] :create_meeting (ChimeSdk.config.create_meeting_by_get_request) Whether the application creates meeting in this meetings#index action by HTTP GET request
         def index
-          if params[:create_meeting].to_s.to_boolean(false) || ChimeSdk.config.create_meeting_by_get_request
+          if params[:create_meeting].to_s.to_boolean(false) || ChimeSdk.config.create_meeting_by_get_request && params[:create_meeting].to_s.to_boolean(true)
             create
           else
             list_meetings
@@ -36,7 +36,8 @@ module ChimeSdk
         #   @option params [String] :create_attendee_from_meeting (ChimeSdk.config.create_attendee_from_meeting) Whether the application creates attendee from meeting in meetings#show action
         def show
           get_meeting
-          if params[:create_attendee_from_meeting].to_s.to_boolean(false) || ChimeSdk.config.create_attendee_from_meeting
+          if params[:create_attendee_from_meeting].to_s.to_boolean(false) || ChimeSdk.config.create_attendee_from_meeting && params[:create_attendee_from_meeting].to_s.to_boolean(true)
+            puts "create_attendee_from_meeting"
             create_attendee_from_meeting
           end
           respond_to do |format|
@@ -51,7 +52,7 @@ module ChimeSdk
         #   @param [Hash] params Request parameter options
         #   @option params [String] :create_meeting_with_attendee (ChimeSdk.config.create_meeting_with_attendee) Whether the application creates meeting with attendee in this meetings#create action
         def create
-          if params[:create_meeting_with_attendee].to_s.to_boolean(false) || ChimeSdk.config.create_meeting_with_attendee
+          if params[:create_meeting_with_attendee].to_s.to_boolean(false) || ChimeSdk.config.create_meeting_with_attendee && params[:create_meeting_with_attendee].to_s.to_boolean(true)
             create_meeting_with_attendee
           else
             create_meeting
