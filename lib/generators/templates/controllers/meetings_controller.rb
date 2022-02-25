@@ -117,7 +117,7 @@ class <%= @namespace %><%= @class_name_prefix %>MeetingsController < Application
   # def application_meeting_metadata(meeting)
   #   {
   #     "MeetingType": "PrivateRoom",
-  #     "Room": @room
+  #     "PrivateRoom": @room
   #   }
   # end
 

@@ -253,7 +253,7 @@ class Api::MeetingsController < ApplicationController
   def application_meeting_metadata(meeting)
     {
       "MeetingType": "PrivateRoom",
-      "Room": @room
+      "PrivateRoom": @room
     }
   end
 
@@ -893,7 +893,7 @@ class MeetingsController < ApplicationController
   def application_meeting_metadata(meeting)
     {
       "MeetingType": "PrivateRoom",
-      "Room": @room
+      "PrivateRoom": @room
     }
   end
 
