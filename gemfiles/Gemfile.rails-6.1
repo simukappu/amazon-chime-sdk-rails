@@ -8,7 +8,6 @@ gem 'rails', '~> 6.1.0'
 gem 'sqlite3'
 gem 'puma'
 gem 'sass-rails'
-gem 'webpacker'
 gem 'turbolinks'
 gem 'jbuilder'
 

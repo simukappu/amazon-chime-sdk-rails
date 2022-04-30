@@ -63,8 +63,6 @@ jobs:
       - name: Prepare test application
         working-directory: ./spec/rails_app
         run: |
-          yarn --check-files
-          bundle exec rails webpacker:compile
           bundle exec rails g chime_sdk:js
       - name: Run tests with RSpec
         run: bundle exec rspec

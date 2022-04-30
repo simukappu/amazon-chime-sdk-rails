@@ -627,7 +627,7 @@ $ echo ${MEETING_ID_2}
 
 Now you can start online meeting using [Amazon Chime SDK](https://aws.amazon.com/chime/chime-sdk) client-side implementation with this responded *Meeting* and *Attendee* data.
 
-You can see [sample single page application](/spec/rails_app/app/javascript/) using [Vue.js](https://vuejs.org) and [Amazon Chime SDK for JavaScript](https://github.com/aws/amazon-chime-sdk-js) as a part of [example Rails application](#examples).
+You can see [customized React Meeting Demo](https://github.com/simukappu/amazon-chime-sdk/tree/main/apps/meeting) as a sample single page application using [React](https://reactjs.org/) and [Amazon Chime SDK for JavaScript](https://github.com/aws/amazon-chime-sdk-js).
 
 
 ### B: Develop your Rails Application with Action View
@@ -1100,7 +1100,6 @@ $ cd spec/rails_app
 $ bin/rake db:migrate
 $ bin/rake db:seed
 $ bin/rails g chime_sdk:js
-$ npm install
 $ bin/rails server
 ```
 
