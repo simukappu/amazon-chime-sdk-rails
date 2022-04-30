@@ -21,4 +21,15 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Routes for public API called from Amazon Chime SDK React Meeting Demo application
+  namespace :api do
+    scope :"v1" do
+      namespace :public do
+        resources :meetings, defaults: { format: :json, create_attendee_from_meeting: false }, only: [:index, :show, :destroy] do
+          resources :meeting_attendees, as: :attendees, path: :attendees, only: [:index, :show, :destroy]
+        end
+      end
+    end
+  end
 end

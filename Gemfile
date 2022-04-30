@@ -23,3 +23,6 @@ group :test do
   # gem 'coveralls', require: false
   gem 'coveralls_reborn', require: false
 end
+
+gem 'rack-cors', groups: [:production, :development]
+gem 'dotenv-rails', groups: [:production, :development]

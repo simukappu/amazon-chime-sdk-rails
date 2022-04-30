@@ -4,6 +4,11 @@
 
 <p><%= link_to("Show Meetings", meeting_resources_path) %></p>
 
+<% if ENV['REACT_MEETING_DEMO_URL'] %>
+  <p><input type="button" value="Open React Meeting Demo" onclick="openReactMeetingDemo()"></p>
+<% end %>
+<div id="react_meeting_demo_url" url="<%= ENV['REACT_MEETING_DEMO_URL'] %>"></div>
+
 <% if @meeting %>
   <strong>Meeting</strong>
   <p>
@@ -53,6 +58,13 @@
     return `${attendee.Attendee.ApplicationMetadata.User.name} (${attendee.Attendee.AttendeeId})`;
   }
 
+  // Open customized React Meeting Demo
+  // https://github.com/simukappu/amazon-chime-sdk/tree/main/apps/meeting
+  function openReactMeetingDemo() {
+    window.open(`${reactMeetingDemoUrl}?preparedApiEndpoint=${window.location.origin}/api/v1/public/meetings&preparedMeetingId=${meeting.Meeting.MeetingId}&preparedAttendeeId=${attendee.Attendee.AttendeeId}`, '_blank').focus();
+  }
+
+  const reactMeetingDemoUrl = document.getElementById('react_meeting_demo_url').getAttribute('url');
   const meeting = JSON.parse(document.getElementById('meeting').getAttribute('meeting-data'));
   const attendee = JSON.parse(document.getElementById('attendee').getAttribute('attendee-data'));
   const attendeeResourcesPath = document.getElementById('attendee-resources-path').getAttribute('attendee-resources-path-data');

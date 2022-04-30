@@ -18,5 +18,15 @@ module RailsApp
       config.hosts << 'www.example.com'
       config.hosts << "localhost"
     end
+
+    # Configure CORS for public API
+    if defined?(Rack::Cors)
+      config.middleware.insert_before 0, Rack::Cors do
+        allow do
+          origins '*'
+          resource '/api/v1/public/*', methods: [:get, :delete], headers: :any
+        end
+      end
+    end
   end
 end
