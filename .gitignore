@@ -88,3 +88,6 @@ package-lock.json
 # Compiled Amazon Chime SDK as single JavaScript file
 /spec/rails_app/app/assets/javascripts/amazon-chime-sdk.min.js
 /spec/rails_app/app/assets/javascripts/amazon-chime-sdk.min.js.map
+
+# Generated files by AWS Copilot CLI
+/copilot/

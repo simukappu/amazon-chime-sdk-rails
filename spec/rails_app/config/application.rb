@@ -14,9 +14,7 @@ module RailsApp
     end
 
     if Rails::VERSION::MAJOR >= 6
-      # Allow requests to www.example.com for RSpec
-      config.hosts << 'www.example.com'
-      config.hosts << "localhost"
+      config.hosts.clear
     end
 
     # Configure CORS for public API
