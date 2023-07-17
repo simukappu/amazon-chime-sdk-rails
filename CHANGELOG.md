@@ -1,3 +1,15 @@
+## 1.1.1 / 2023-07-17
+[Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v1.1.0...v1.1.1)
+
+Enhancements:
+
+* Remove unmaintained Rails versions from test cases
+* Update test case with Rails 7.0
+
+Bug Fixes:
+
+* Remove unnecessary log for debug
+
 ## 1.1.0 / 2022-05-04
 [Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v1.0.0...v1.1.0)
 
