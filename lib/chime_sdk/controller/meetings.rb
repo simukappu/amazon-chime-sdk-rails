@@ -37,7 +37,6 @@ module ChimeSdk
         def show
           get_meeting
           if params[:create_attendee_from_meeting].to_s.to_boolean(false) || ChimeSdk.config.create_attendee_from_meeting && params[:create_attendee_from_meeting].to_s.to_boolean(true)
-            puts "create_attendee_from_meeting"
             create_attendee_from_meeting
           end
           respond_to do |format|
