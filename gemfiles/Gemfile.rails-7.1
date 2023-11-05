@@ -3,7 +3,9 @@ source 'https://rubygems.org'
 gemspec path: '../'
 
 # Bundle Rails
-gem 'rails', '~> 7.0.0'
+gem 'rails', '~> 7.1.0'
+# https://github.com/lynndylanhurley/devise_token_auth/pull/1606
+gem 'devise_token_auth', git: 'https://github.com/lynndylanhurley/devise_token_auth.git'
 
 gem 'sqlite3'
 gem 'puma'
