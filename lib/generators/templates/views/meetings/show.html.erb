@@ -71,8 +71,8 @@
     try {
       const audioInputDevices = await meetingSession.audioVideo.listAudioInputDevices();
       const audioOutputDevices = await meetingSession.audioVideo.listAudioOutputDevices();
-      await meetingSession.audioVideo.chooseAudioInputDevice(audioInputDevices[0].deviceId);
-      await meetingSession.audioVideo.chooseAudioOutputDevice(audioOutputDevices[0].deviceId);
+      await meetingSession.audioVideo.startAudioInput(audioInputDevices[0].deviceId);
+      await meetingSession.audioVideo.chooseAudioOutput(audioOutputDevices[0].deviceId);
     } catch (error) {
       // handle error - unable to acquire audio device perhaps due to permissions blocking
       console.log(error);
