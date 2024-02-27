@@ -28,15 +28,6 @@ module ChimeSdk
     #   @return [Boolean] Prefix to make unique key of Chime SDK meetings and attendees
     attr_accessor :prefix
 
-    # @overload max_meeting_results
-    #   Return default max_results value used in list_meetings API.
-    #   @return [Boolean] Default max_results value used in list_meetings API
-    # @overload max_meeting_results=(value)
-    #   Set default max_results value used in list_meetings API.
-    #   @param [Boolean] max_meeting_results The new max_meeting_results
-    #   @return [Boolean] Default max_results value used in list_meetings API
-    attr_accessor :max_meeting_results
-
     # @overload max_attendee_results
     #   Return default max_results value used in list_attendees API.
     #   @return [Boolean] Default max_results value used in list_attendees API
@@ -80,7 +71,6 @@ module ChimeSdk
       @application_name              = 'chime-sdk-rails'
       @media_region                  = 'us-east-1'
       @prefix                        = "#{@application_name}-#{Rails.env}-"
-      @max_meeting_results           = 10
       @max_attendee_results          = 10
       @create_meeting_with_attendee  = true
       @create_attendee_from_meeting  = true

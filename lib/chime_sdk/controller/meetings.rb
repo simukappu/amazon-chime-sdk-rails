@@ -21,10 +21,11 @@ module ChimeSdk
           if params[:create_meeting].to_s.to_boolean(false) || ChimeSdk.config.create_meeting_by_get_request && params[:create_meeting].to_s.to_boolean(true)
             create
           else
-            list_meetings
+            @meeting_request_id = ChimeSdk.config.prefix + meeting_request_id
+            @attendee_request_id = ChimeSdk.config.prefix + attendee_request_id
             respond_to do |format|
               format.html
-              format.json { render json: { meetings: @meetings } }
+              format.json { render json: { meeting_request_id: @meeting_request_id, attendee_request_id: @attendee_request_id } }
             end
           end
         end

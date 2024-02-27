@@ -11,16 +11,26 @@ describe ChimeSdk::Controller::Attendees, type: :request do
     test_attendee = {
       external_user_id: "ChimeSdkRailsApp-test-User-#{@attendee_user.id}",
       attendee_id: @attendee_id,
-      join_token: "dummy"
+      join_token: "dummy",
+      capabilities: {
+        audio: "SendReceive",
+        video: "SendReceive",
+        content: "SendReceive"
+      }
     }
     dummy_attendee = {
       external_user_id: "ChimeSdkRailsApp-test-User-0",
       attendee_id: @dummy_attendee_id,
-      join_token: "dummy"
+      join_token: "dummy",
+      capabilities: {
+        audio: "SendReceive",
+        video: "SendReceive",
+        content: "SendReceive"
+      }
     }
 
     # Use stubs for the AWS SDK for Ruby
-    client = Aws::Chime::Client.new(stub_responses: true)
+    client = Aws::ChimeSDKMeetings::Client.new(stub_responses: true)
     client.stub_responses(:list_attendees, {
       attendees: [ test_attendee, dummy_attendee ]
     })

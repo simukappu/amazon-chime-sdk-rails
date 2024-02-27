@@ -17,7 +17,6 @@ module ChimeSdk
   #     config.appication_name               = 'chime-sdk-rails'
   #     config.media_region                  = 'us-east-1'
   #     config.prefix                        = "#{config.application_name}-#{Rails.env}-"
-  #     config.max_meeting_results           = 10
   #     config.max_attendee_results          = 10
   #     config.create_meeting_with_attendee  = true
   #     config.create_attendee_from_meeting  = true
@@ -27,8 +26,8 @@ module ChimeSdk
     yield(config) if block_given?
   end
 
-  # Load AWS SDK for Amazon Chime
-  require 'aws-sdk-chime'
+  # Load AWS SDK for Amazon Chime SDK meetings
+  require 'aws-sdk-chimesdkmeetings'
 
   # Load ChimeSdk helpers
   require 'chime_sdk/controller/common'

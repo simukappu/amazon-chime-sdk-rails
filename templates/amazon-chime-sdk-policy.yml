@@ -10,7 +10,8 @@ Parameters:
     Description: The name of the service.
 
 Resources:
-  # https://docs.aws.amazon.com/chime-sdk/latest/dg/iam-users-roles.html
+  # https://docs.aws.amazon.com/chime-sdk/latest/ag/security_iam_id-based-policy-examples-chime-sdk.html
+  # https://docs.aws.amazon.com/chime-sdk/latest/APIReference/API_Operations_Amazon_Chime_SDK_Meetings.html
   AmazonChimeSdkPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
@@ -21,26 +22,21 @@ Resources:
             Effect: Allow
             Action:
               - chime:CreateMeeting
-              - chime:CreateMeetingWithAttendees
-              - chime:DeleteMeeting
+              # - chime:CreateMeetingWithAttendees
               - chime:GetMeeting
-              - chime:ListMeetings
+              - chime:DeleteMeeting
               - chime:CreateAttendee
-              - chime:BatchCreateAttendee
-              - chime:DeleteAttendee
-              - chime:GetAttendee
               - chime:ListAttendees
-              - chime:ListAttendeeTags
-              - chime:ListMeetingTags
+              - chime:GetAttendee
+              - chime:DeleteAttendee
+              # - chime:BatchCreateAttendee
+              # - chime:BatchUpdateAttendeeCapabilitiesExcept
+              # - chime:UpdateAttendeeCapabilities
               - chime:ListTagsForResource
-              - chime:TagAttendee
-              - chime:TagMeeting
               - chime:TagResource
-              - chime:UntagAttendee
-              - chime:UntagMeeting
               - chime:UntagResource
-              - chime:StartMeetingTranscription
-              - chime:StopMeetingTranscription
+              # - chime:StartMeetingTranscription
+              # - chime:StopMeetingTranscription
             Resource: "*"
 
 Outputs:

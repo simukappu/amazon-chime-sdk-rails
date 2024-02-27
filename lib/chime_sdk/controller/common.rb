@@ -6,9 +6,9 @@ module ChimeSdk
       extend ActiveSupport::Concern
 
       included do
-        rescue_from Aws::Chime::Errors::ForbiddenException, with: :render_forbidden
-        rescue_from Aws::Chime::Errors::NotFoundException, with: :render_resource_not_found
-        rescue_from Aws::Chime::Errors::ValidationException, with: :render_resource_not_found
+        rescue_from Aws::ChimeSDKMeetings::Errors::ForbiddenException, with: :render_forbidden
+        rescue_from Aws::ChimeSDKMeetings::Errors::NotFoundException, with: :render_resource_not_found
+        rescue_from Aws::ChimeSDKMeetings::Errors::ValidationException, with: :render_resource_not_found
 
         class ::String
           # Convets to boolean.
@@ -37,14 +37,6 @@ module ChimeSdk
       # @return [String] Attendee id
       def attendee_id
         @attendee ? @attendee[:Attendee][:AttendeeId] : attendee_id_param
-      end
-
-      # List meetings by MeetingCoordinator.
-      # @api protected
-      # @return [Array<Hash>] Meeting list
-      def list_meetings
-        @meetings = ChimeSdk::MeetingCoordinator.list_meetings(prefix_filter: meeting_request_id)
-        @meetings = @meetings.map { |meeting| merge_application_meeting_metadata(meeting) }
       end
 
       # Create meeting by MeetingCoordinator.
@@ -82,7 +74,7 @@ module ChimeSdk
       # @api protected
       # @return [Hash] Created attendee
       def create_attendee
-        @attendee = ChimeSdk::MeetingCoordinator.create_attendee(meeting_id, attendee_request_id, tags: attendee_tags)
+        @attendee = ChimeSdk::MeetingCoordinator.create_attendee(meeting_id, attendee_request_id)
         @attendee = merge_application_attendee_metadata(@attendee)
       end
 
@@ -142,13 +134,6 @@ module ChimeSdk
       # @return [Array<Hash>] Tags for meetings
       def meeting_tags
         tags + optional_meeting_tags
-      end
-
-      # Return tags for attendees from defined optional_attendee_tags.
-      # @api protected
-      # @return [Array<Hash>] Tags for attendees
-      def attendee_tags
-        tags + optional_attendee_tags
       end
 
       # Merge application metadata into meeting instance and return.

@@ -20,6 +20,8 @@
   * *Single Javascript Generator* - Generator to [bundle Amazon Chime SDK into a single .js file](https://github.com/aws-samples/amazon-chime-sdk/tree/main/utils/singlejs) and put it into [Asset Pipeline](https://guides.rubyonrails.org/asset_pipeline.html) for your Rails application with Action View.
   * *View Generator* - Generator to create customizable meetings views for your Rails application with Action View.
 
+Note: The latest *amazon-chime-sdk-rails* supports AWS SDK endpoint with latest [ChimeSDKMeetings](https://docs.aws.amazon.com/chime-sdk/latest/APIReference/API_Operations_Amazon_Chime_SDK_Meetings.html) namespace. If you want to use deprecated [Chime](https://docs.aws.amazon.com/chime/latest/APIReference/welcome.html) namespace, use older version of *amazon-chime-sdk-rails*. See [Migrating from the Amazon Chime namespace](https://docs.aws.amazon.com/chime-sdk/latest/dg/migrate-from-chm-namespace.html) for more details.
+
 
 ## Getting Started
 
@@ -137,7 +139,8 @@ Push "Continue" and go to the private meeting room!
 
 ### Deploy application to your AWS environment
 
-At first, [install the latest version of AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and [set up AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) in your local environment.
+At first, [install the latest version of AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html), [set up AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) and [](Installing the AWS SAM CLI) in your local environment.
+At first, [install the latest version of AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html), [set up AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) and [installing the AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html) in your local environment.
 
 Deploy customized React Meeting Demo to your AWS environment:
 
@@ -178,7 +181,7 @@ $ copilot init
     > ./Dockerfile
       Enter custom path for your Dockerfile
       Use an existing image instead
-    Would you like to deploy a test environment? [? for help] (y/N) no
+    Would you like to deploy an environment? [? for help] (y/N) no
 $ mkdir copilot/rails-app/addons && cp templates/amazon-chime-sdk-policy.yml copilot/rails-app/addons/
 $ copilot env init --name test --profile default --app amazon-chime-sdk-rails
     Would you like to use the default configuration for a new environment?
@@ -189,6 +192,7 @@ $ copilot env init --name test --profile default --app amazon-chime-sdk-rails
     > Yes, use default.
       Yes, but I'd like configure the default resources (CIDR ranges, AZs).
       No, I'd like to import existing resources (VPC, subnets).
+$ copilot env deploy --name test
 $ REACT_MEETING_DEMO_URL=`aws cloudformation describe-stacks --region us-east-1 --stack-name react-meeting-demo | jq -r '.Stacks[].Outputs[].OutputValue'`
 $ gsed -i "s/#variables:/variables:/g" copilot/rails-app/manifest.yml
 $ gsed -i "/variables:/a\  REACT_MEETING_DEMO_URL: $REACT_MEETING_DEMO_URL" copilot/rails-app/manifest.yml

@@ -2,26 +2,9 @@
 
 <h1>Meetings by Amazon Chime SDK</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Meeting ID</th>
-      <th>External Meeting ID</th>
-      <th>Media Region</th>
-      <th colspan="1"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @meetings.each do |meeting| %>
-      <tr>
-        <td><%= link_to(meeting[:Meeting][:MeetingId], meeting_resource_path(meeting[:Meeting][:MeetingId])) %></td>
-        <td><%= meeting[:Meeting][:ExternalMeetingId] %></td>
-        <td><%= meeting[:Meeting][:MediaRegion] %></td>
-        <td><%= link_to 'Destroy', meeting_resource_path(meeting[:Meeting][:MeetingId]), method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<p>
+Meeting Request ID : <%= @meeting_request_id %><br>
+Attendee Request ID : <%= @attendee_request_id %><br>
+</p>
 
 <p><%= link_to 'Create Meeting', meeting_resources_path, method: :post %></p>

@@ -8,30 +8,51 @@ describe ChimeSdk::Controller::Meetings, type: :request do
     dummy_media_placement = {
       audio_host_url: "dummy",
       audio_fallback_url: "dummy",
-      screen_data_url: "dummy",
-      screen_sharing_url: "dummy",
-      screen_viewing_url: "dummy",
       signaling_url: "dummy",
-      turn_control_url: "dummy"
+      turn_control_url: "dummy",
+      screen_data_url: "dummy",
+      screen_viewing_url: "dummy",
+      screen_sharing_url: "dummy",
+      event_ingestion_url: "dummy"
+    }
+    meeting_features = {
+      audio: {
+        echo_reduction: "AVAILABLE"
+      },
+      video: {
+        max_resolution: "HD"
+      },
+      content: {
+        max_resolution: "FHD"
+      },
+      attendee: {
+        max_count: 100
+      }
     }
     test_meeting = {
       meeting_id: @meeting_id,
+      meeting_host_id: nil,
       external_meeting_id: "ChimeSdkRailsApp-test-PrivateRoom-#{@room.id}",
+      media_region: "us-east-1",
       media_placement: dummy_media_placement,
-      media_region: "us-east-1"
+      meeting_features: meeting_features,
+      primary_meeting_id: nil,
+      tenant_ids: [],
+      meeting_arn: "arn:aws:chime:us-east-1:000000000000:meeting/#{@meeting_id}"
     }
     dummy_meeting = {
       meeting_id: @dummy_meeting_id,
       external_meeting_id: "ChimeSdkRailsApp-test-PrivateRoom-0",
+      media_region: "us-east-1",
       media_placement: dummy_media_placement,
-      media_region: "us-east-1"
+      meeting_features: meeting_features,
+      primary_meeting_id: nil,
+      tenant_ids: [],
+      meeting_arn: "arn:aws:chime:us-east-1:000000000000:meeting/#{@meeting_id}"
     }
 
     # Use stubs for the AWS SDK for Ruby
-    client = Aws::Chime::Client.new(stub_responses: true)
-    client.stub_responses(:list_meetings, {
-      meetings: [ test_meeting, dummy_meeting ]
-    })
+    client = Aws::ChimeSDKMeetings::Client.new(stub_responses: true)
     client.stub_responses(:get_meeting, -> (context) {
       context.params[:meeting_id] == @meeting_id ? { meeting: test_meeting } : 'NotFoundException'
     })
@@ -101,12 +122,12 @@ describe ChimeSdk::Controller::Meetings, type: :request do
               expect(response).to have_http_status(200)
             end
 
-            it "returns meetings list filtered by prefix" do
-              expect(JSON.parse(response.body)["meetings"].length).to eq(1)
+            it "returns meeting_request_id" do
+              expect(JSON.parse(response.body)["meeting_request_id"]).not_to be_nil
             end
 
-            it "returns valid meeting in the list" do
-              expect(JSON.parse(response.body)["meetings"][0]["Meeting"]["MeetingId"]).to eq(@meeting_id)
+            it "returns attendee_request_id" do
+              expect(JSON.parse(response.body)["attendee_request_id"]).not_to be_nil
             end
           end
 
@@ -286,10 +307,6 @@ describe ChimeSdk::Controller::Meetings, type: :request do
             it "returns response with 200 status" do
               expect(response).to have_http_status(200)
               expect(response.body).to include("Meetings by Amazon Chime SDK")
-            end
-
-            it "returns valid meeting in the list" do
-              expect(response.body).to include(@meeting_id)
             end
           end
 

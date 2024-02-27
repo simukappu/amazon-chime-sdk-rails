@@ -11,9 +11,6 @@ ChimeSdk.configure do |config|
   # Default value is "#{config.application_name}-#{Rails.env}-".
   config.prefix = "#{config.application_name}-#{Rails.env}-"
 
-  # Configure default max_results value used in list_meetings API.
-  config.max_meeting_results = 10
-
   # Configure default max_results value used in list_attendees API.
   config.max_attendee_results = 10
 
