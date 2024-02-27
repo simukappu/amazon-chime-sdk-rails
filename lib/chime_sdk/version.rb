@@ -1,4 +1,4 @@
 module ChimeSdk
   # Gem version of amazon-chime-sdk-rails
-  VERSION = "1.1.1"
+  VERSION = "2.0.0"
 end

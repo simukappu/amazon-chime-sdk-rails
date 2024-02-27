@@ -1,3 +1,12 @@
+## 2.0.0 / 2024-02-28
+[Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v1.1.1...v2.0.0)
+
+Enhancements:
+
+* Update [API namespace from Chime to ChimeSDKMeetings](https://docs.aws.amazon.com/chime-sdk/latest/dg/migrate-from-chm-namespace.html)
+* Update embedded [Chime SDK from v2 to v3](https://aws.github.io/amazon-chime-sdk-js/modules/migrationto_3_0.html)
+* Update test case with Rails 7.1
+
 ## 1.1.1 / 2023-07-17
 [Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v1.1.0...v1.1.1)
 
