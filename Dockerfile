@@ -1,4 +1,4 @@
-FROM ruby:3.0.4
+FROM ruby:3.3.0
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs npm
 ENV ROOT="/amazon-chime-sdk-rails"
 WORKDIR ${ROOT}
