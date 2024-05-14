@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.2.2'
 
   s.add_dependency 'railties', '>= 5.0.0'
-  s.add_dependency 'aws-sdk-chimesdkmeetings', '>= 1.0.0'
+  s.add_dependency 'aws-sdk-chimesdkmeetings', '1.31.0'
 
   s.add_development_dependency 'rspec-rails', '>= 4.0.1'
   s.add_development_dependency 'factory_bot_rails', '>= 6.1.0'
