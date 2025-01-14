@@ -1,3 +1,11 @@
+## 2.0.1 / 2025-01-14
+[Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.0.0...v2.0.1)
+
+Enhancements:
+
+* Remove unmaintained Rails 6.1 from test cases
+* Update test case with Rails 7.2 and Rails 8.0
+
 ## 2.0.0 / 2024-02-28
 [Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v1.1.1...v2.0.0)
 
