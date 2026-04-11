@@ -1,3 +1,16 @@
+## 2.1.0 / 2026-04-11
+[Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.0.1...v2.1.0)
+
+Enhancements:
+
+* Support Rails 8.1
+* Update CI configuration and documentation
+
+Dependencies:
+
+* Require Ruby 3.1+ and Rails 7.0+
+* Update development dependencies
+
 ## 2.0.1 / 2025-01-14
 [Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.0.0...v2.0.1)
 
