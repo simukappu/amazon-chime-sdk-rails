@@ -2,8 +2,6 @@
 
 [![Build Status](https://github.com/simukappu/amazon-chime-sdk-rails/actions/workflows/build.yml/badge.svg)](https://github.com/simukappu/amazon-chime-sdk-rails/actions/workflows/build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/simukappu/amazon-chime-sdk-rails/badge.svg?branch=master)](https://coveralls.io/github/simukappu/amazon-chime-sdk-rails?branch=master)
-[![Dependency](https://img.shields.io/depfu/simukappu/amazon-chime-sdk-rails.svg)](https://depfu.com/repos/simukappu/amazon-chime-sdk-rails)
-[![Inline Docs](http://inch-ci.org/github/simukappu/amazon-chime-sdk-rails.svg?branch=master)](http://inch-ci.org/github/simukappu/amazon-chime-sdk-rails)
 [![Gem Version](https://badge.fury.io/rb/amazon-chime-sdk-rails.svg)](https://rubygems.org/gems/amazon-chime-sdk-rails)
 [![Gem Downloads](https://img.shields.io/gem/dt/amazon-chime-sdk-rails.svg)](https://rubygems.org/gems/amazon-chime-sdk-rails)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
@@ -146,8 +144,7 @@ Push "Continue" and go to the private meeting room!
 
 ### Deploy application to your AWS environment
 
-At first, [install the latest version of AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html), [set up AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) and [](Installing the AWS SAM CLI) in your local environment.
-At first, [install the latest version of AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html), [set up AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) and [installing the AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html) in your local environment.
+At first, [install the latest version of AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html), [set up AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) and [install the AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html) in your local environment.
 
 Deploy customized React Meeting Demo to your AWS environment:
 
