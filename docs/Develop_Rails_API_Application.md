@@ -284,6 +284,8 @@ Now ready to take off!
 
 Created Rails API works like this:
 
+Note: The API response examples below are simplified for readability. Actual responses may include additional fields such as `MeetingFeatures`, `MeetingArn`, `TenantIds`, `PrimaryMeetingId` and `Capabilities` depending on the Amazon Chime SDK version.
+
 ```bash
 # Sign up users
 
