@@ -26,7 +26,11 @@ Rails.application.configure do
   config.cache_store = :null_store
 
   # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
+  if Rails::VERSION::MAJOR >= 8 || (Rails::VERSION::MAJOR == 7 && Rails::VERSION::MINOR >= 1)
+    config.action_dispatch.show_exceptions = :rescuable
+  else
+    config.action_dispatch.show_exceptions = false
+  end
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
@@ -43,6 +47,9 @@ Rails.application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+
+  # Do not check if assets exist before linking to them.
+  config.assets.check_precompiled_asset = false if config.respond_to?(:assets) && config.assets.respond_to?(:check_precompiled_asset=)
 
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true

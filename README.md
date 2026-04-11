@@ -10,10 +10,17 @@
 
 *amazon-chime-sdk-rails* brings server-side implementation of [Amazon Chime SDK](https://aws.amazon.com/chime/chime-sdk) to your [Ruby on Rails](https://rubyonrails.org) application. [Amazon Chime SDK](https://aws.amazon.com/chime/chime-sdk) provides client-side implementation to build real-time communications for your application, and *amazon-chime-sdk-rails* enables you to easily add server-side implementation to your Rails application.
 
+## Supported Versions
+
+* Ruby 3.1+
+* Rails 7.0+
+
+Tested with Rails 7.0, 7.1, 7.2, 8.0 and 8.1.
+
 <kbd>![cloud-react-meeting-demo-joined-image](https://raw.githubusercontent.com/simukappu/amazon-chime-sdk-rails/images/cloud_react_meeting_demo_joined.png)</kbd>
 
 *amazon-chime-sdk-rails* supports both of [Rails API Application](https://guides.rubyonrails.org/api_app.html) and [Rails Application with Action View](https://guides.rubyonrails.org/action_view_overview.html). The gem provides following functions:
-* *Meeting Coordinator* - Wrapper client module of [AWS SDK for Ruby](https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/Chime/Client.html), which simulates [AWS SDK for JavaScript](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Chime.html) to communicate with Amazon Chime SDK client implementation by JSON format.
+* *Meeting Coordinator* - Wrapper client module of [AWS SDK for Ruby](https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/ChimeSDKMeetings/Client.html), which simulates [AWS SDK for JavaScript](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/ChimeSDKMeetings.html) to communicate with Amazon Chime SDK client implementation by JSON format.
 * *Controller Templates* - Mixin module implementation for meetings and attendees controllers.
 * *Rails Generators*
   * *Controller Generator* - Generator to create customizable meetings and attendees controllers in your Rails application.

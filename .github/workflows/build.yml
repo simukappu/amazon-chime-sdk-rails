@@ -13,7 +13,7 @@ on:
 env:
   # https://nodejs.org/en/download/current
   # https://nodejs.org/en/about/previous-releases
-  node-version: 23.6.0
+  node-version: 24.x
 
 jobs:
   build:
@@ -26,6 +26,7 @@ jobs:
           - gemfiles/Gemfile.rails-7.1
           - gemfiles/Gemfile.rails-7.2
           - gemfiles/Gemfile.rails-8.0
+          - gemfiles/Gemfile.rails-8.1
         include:
           # https://www.ruby-lang.org/en/downloads
           - gemfile: gemfiles/Gemfile.rails-7.0
@@ -36,6 +37,8 @@ jobs:
             ruby-version: 3.3.6
           - gemfile: gemfiles/Gemfile.rails-8.0
             ruby-version: 3.3.6
+          - gemfile: gemfiles/Gemfile.rails-8.1
+            ruby-version: 3.4.9
           - gemfile: Gemfile
             ruby-version: head
             allow_failures: 'true'
@@ -45,14 +48,14 @@ jobs:
       BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node-version }}
       - name: Prepare test application

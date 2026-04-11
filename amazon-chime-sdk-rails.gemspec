@@ -16,14 +16,14 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- spec/*`.split("\n")
   s.require_paths = ["lib"]
-  s.required_ruby_version = '>= 2.2.2'
+  s.required_ruby_version = '>= 3.1.0'
 
-  s.add_dependency 'railties', '>= 5.0.0'
+  s.add_dependency 'railties', '>= 7.0.0'
   s.add_dependency 'aws-sdk-chimesdkmeetings', '>= 1.0.0'
 
-  s.add_development_dependency 'rspec-rails', '>= 4.0.1'
-  s.add_development_dependency 'factory_bot_rails', '>= 6.1.0'
-  s.add_development_dependency 'ammeter', '>= 1.1.4'
-  s.add_development_dependency 'yard', '>= 0.9.25'
-  s.add_development_dependency 'devise_token_auth', '>= 1.1.4'
+  s.add_development_dependency 'rspec-rails', '>= 6.0.0'
+  s.add_development_dependency 'factory_bot_rails', '>= 6.2.0'
+  s.add_development_dependency 'ammeter', '>= 1.1.5'
+  s.add_development_dependency 'yard', '>= 0.9.36'
+  s.add_development_dependency 'devise_token_auth', '>= 1.2.2'
 end
