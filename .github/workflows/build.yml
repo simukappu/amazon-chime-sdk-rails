@@ -30,15 +30,15 @@ jobs:
         include:
           # https://www.ruby-lang.org/en/downloads
           - gemfile: gemfiles/Gemfile.rails-7.0
-            ruby-version: 3.1.6
+            ruby-version: 3.2.9
           - gemfile: gemfiles/Gemfile.rails-7.1
-            ruby-version: 3.2.6
+            ruby-version: 3.2.9
           - gemfile: gemfiles/Gemfile.rails-7.2
-            ruby-version: 3.3.6
+            ruby-version: 3.3.10
           - gemfile: gemfiles/Gemfile.rails-8.0
-            ruby-version: 3.3.6
+            ruby-version: 3.4.8
           - gemfile: gemfiles/Gemfile.rails-8.1
-            ruby-version: 3.4.9
+            ruby-version: 4.0.0
           - gemfile: Gemfile
             ruby-version: head
             allow_failures: 'true'
@@ -48,14 +48,14 @@ jobs:
       BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.node-version }}
       - name: Prepare test application
