@@ -1,10 +1,10 @@
 # amazon-chime-sdk-rails
 
-[![Build Status](https://github.com/simukappu/amazon-chime-sdk-rails/actions/workflows/build.yml/badge.svg)](https://github.com/simukappu/amazon-chime-sdk-rails/actions/workflows/build.yml)
-[![Coverage Status](https://coveralls.io/repos/github/simukappu/amazon-chime-sdk-rails/badge.svg?branch=master)](https://coveralls.io/github/simukappu/amazon-chime-sdk-rails?branch=master)
 [![Gem Version](https://badge.fury.io/rb/amazon-chime-sdk-rails.svg)](https://rubygems.org/gems/amazon-chime-sdk-rails)
 [![Gem Downloads](https://img.shields.io/gem/dt/amazon-chime-sdk-rails.svg)](https://rubygems.org/gems/amazon-chime-sdk-rails)
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+[![Build Status](https://github.com/simukappu/amazon-chime-sdk-rails/actions/workflows/build.yml/badge.svg)](https://github.com/simukappu/amazon-chime-sdk-rails/actions/workflows/build.yml)
+[![Coverage Status](https://coveralls.io/repos/github/simukappu/amazon-chime-sdk-rails/badge.svg?branch=master)](https://coveralls.io/github/simukappu/amazon-chime-sdk-rails?branch=master)
+[![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 *amazon-chime-sdk-rails* brings server-side implementation of [Amazon Chime SDK](https://aws.amazon.com/chime/chime-sdk) to your [Ruby on Rails](https://rubyonrails.org) application. [Amazon Chime SDK](https://aws.amazon.com/chime/chime-sdk) provides client-side implementation to build real-time communications for your application, and *amazon-chime-sdk-rails* enables you to easily add server-side implementation to your Rails application.
 
