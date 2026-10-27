@@ -9,6 +9,8 @@ Security Fixes:
 * Do not return `JoinToken` from attendees `index` and `show` actions. A join token is the credential to join a meeting as that attendee, so other participants could impersonate the attendee
 * Do not create meetings or attendees by HTTP GET request parameters. `create_meeting` in meetings `index` and `create_attendee_from_meeting` in meetings `show` can now only disable the creation enabled by `config.create_meeting_by_get_request` and `config.create_attendee_from_meeting`, since GET requests are not protected from CSRF
 * Raise `NotImplementedError` from `attendee_request_id` unless it is defined in your controllers. The previous default `"default"` made every user join meetings as the same attendee with the same join token. The generated controller templates also raise it until you define `attendee_request_id`
+* Build the attendee list in the generated meeting view with `textContent` instead of `innerHTML`, so attendee names from application metadata cannot inject HTML
+* Remove the unpinned axios script loaded from unpkg in the generated meeting view and use `fetch` instead
 
 ## 2.1.0 / 2026-04-11
 [Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.0.1...v2.1.0)

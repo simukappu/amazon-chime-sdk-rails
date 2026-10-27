@@ -43,7 +43,6 @@
 <% end %>
 
 <%= javascript_include_tag "amazon-chime-sdk.min.js" %>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script defer>
   // This is a very simple script as a template view using Amazon Chime SDK.
@@ -75,9 +74,16 @@
   const configuration = new ChimeSDK.MeetingSessionConfiguration(meeting, attendee);
   const meetingSession = new ChimeSDK.DefaultMeetingSession(configuration, logger, deviceController);
 
-  const attendeeApi = axios.create({
-    baseURL: `${attendeeResourcesPath}/`
-  });
+  async function getAttendee(attendeeId) {
+    const response = await fetch(`${attendeeResourcesPath}/${encodeURIComponent(attendeeId)}`, {
+      headers: { 'Accept': 'application/json' },
+      credentials: 'same-origin'
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to get attendee: ${response.status}`);
+    }
+    return response.json();
+  }
 
   async function join() {
     try {
@@ -121,9 +127,9 @@
     const presentAttendeeMap = {};
     const callback = (presentAttendeeId, present) => {
       if (present) {
-        attendeeApi.get(presentAttendeeId)
-          .then(response => {
-            presentAttendeeMap[presentAttendeeId] = response.data;
+        getAttendee(presentAttendeeId)
+          .then(attendee => {
+            presentAttendeeMap[presentAttendeeId] = attendee;
             updateAttendeeStatus(presentAttendeeMap);
           })
           .catch(error => {
@@ -138,11 +144,15 @@
   }
 
   function updateAttendeeStatus(presentAttendeeMap) {
-    presentAttendees = "<strong>Present Attendees</strong><ul>";
+    // Use textContent since attendee names are user-provided values
+    const title = document.createElement('strong');
+    title.textContent = 'Present Attendees';
+    const list = document.createElement('ul');
     Object.values(presentAttendeeMap).forEach(attendee => {
-      presentAttendees = presentAttendees + `<li>${showApplicationUserName(attendee)}</li>`
+      const item = document.createElement('li');
+      item.textContent = showApplicationUserName(attendee);
+      list.appendChild(item);
     });
-    presentAttendees = presentAttendees + '</ul>'
-    document.getElementById("attendee-status").innerHTML = presentAttendees;
+    document.getElementById("attendee-status").replaceChildren(title, list);
   }
 </script>
