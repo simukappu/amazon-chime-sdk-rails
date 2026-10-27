@@ -22,4 +22,9 @@ ChimeSdk.configure do |config|
 
   # Configure whether the application creates meeting in meetings#index action by HTTP GET request.
   config.create_meeting_by_get_request = false
+
+  # Configure whether the controllers verify that requested meetings were created with config.prefix + meeting_request_id.
+  # When enabled, meetings and attendees controllers respond with 404 for meetings of other resources, such as other private rooms.
+  # Default value is true. Disabling it allows any meeting in your AWS account to be accessed by its meeting id.
+  config.verify_meeting_request_id = true
 end

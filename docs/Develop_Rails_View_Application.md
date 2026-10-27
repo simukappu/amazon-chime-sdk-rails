@@ -299,6 +299,11 @@ class MeetingAttendeesController < ApplicationController
     end
   end
 
+  # Uncomment (use the same value as your meetings controller)
+  def meeting_request_id
+    "PrivateRoom-#{@room.id}"
+  end
+
   # Uncomment
   def attendee_request_id
     "User-#{current_user.id}"

@@ -8,4 +8,10 @@ class Api::Public::MeetingAttendeesController < ApplicationController
       "User": User.find_by_id(user_id)
     }
   end
+
+  # This public API for the React Meeting Demo accepts any meeting in the AWS account by its meeting id.
+  # Do not disable this verification in your applications unless you authorize access to meetings by yourself.
+  def verify_meeting_request_id?
+    false
+  end
 end

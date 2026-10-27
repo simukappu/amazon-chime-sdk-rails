@@ -23,6 +23,17 @@ class <%= @namespace %><%= @class_name_prefix %>MeetingAttendeesController < App
   #   params[:id]
   # end
 
+  # Unique meeting request id to identify meeting by Amazon Chime.
+  # Configure it depending on your application resources to identify meeting.
+  # For example, set "PrivateRoom-#{@room.id}" by Room model.
+  # Use the same value as your meetings controller since requested meetings are verified with this id.
+  # @api protected
+  # @return [String] Unique meeting request id to identify meeting by Amazon Chime
+  def meeting_request_id
+    # "PrivateRoom-#{@room.id}"
+    "<%= @default_meeting_request_id %>"
+  end
+
   # Unique attendee request id to identify attendee by Amazon Chime.
   # Configure it depending on your application resources to identify attendee.
   # For example, set "User-#{current_user.id}" by User model.

@@ -4,8 +4,10 @@ describe ChimeSdk::Controller::Attendees, type: :request do
     @attendee_id       = "76543210-ba98-fedc-jihg-vutsrqponmlk"
     @dummy_meeting_id  = "91234567-89ab-cdef-ghij-klmnopqrstuv"
     @dummy_attendee_id = "96543210-ba98-fedc-jihg-vutsrqponmlk"
+    @other_meeting_id  = "81234567-89ab-cdef-ghij-klmnopqrstuv"
 
     @room = create(:room)
+    @other_room = create(:room)
     @attendee_user = create(:user)
     @room.add_member(@attendee_user)
     test_attendee = {
@@ -29,8 +31,24 @@ describe ChimeSdk::Controller::Attendees, type: :request do
       }
     }
 
+    meeting_of = -> (meeting_id, room) {
+      {
+        meeting_id: meeting_id,
+        external_meeting_id: "ChimeSdkRailsApp-test-PrivateRoom-#{room.id}",
+        media_region: "us-east-1",
+        media_placement: { audio_host_url: "dummy" }
+      }
+    }
+
     # Use stubs for the AWS SDK for Ruby
     client = Aws::ChimeSDKMeetings::Client.new(stub_responses: true)
+    client.stub_responses(:get_meeting, -> (context) {
+      case context.params[:meeting_id]
+      when @meeting_id then { meeting: meeting_of.(@meeting_id, @room) }
+      when @other_meeting_id then { meeting: meeting_of.(@other_meeting_id, @other_room) }
+      else 'ForbiddenException'
+      end
+    })
     client.stub_responses(:list_attendees, {
       attendees: [ test_attendee, dummy_attendee ]
     })
@@ -109,6 +127,12 @@ describe ChimeSdk::Controller::Attendees, type: :request do
           it "returns valid attendee in the list" do
             expect(JSON.parse(response.body)["attendees"][0]["Attendee"]["AttendeeId"]).to eq(@attendee_id)
           end
+
+          it "does not return join tokens of attendees in the list" do
+            JSON.parse(response.body)["attendees"].each do |attendee|
+              expect(attendee["Attendee"]).not_to have_key("JoinToken")
+            end
+          end
         end
 
         describe "GET /meetings/:meeting_id/attendees/:attendee_id" do
@@ -123,6 +147,10 @@ describe ChimeSdk::Controller::Attendees, type: :request do
 
             it "returns valid attendee" do
               expect(JSON.parse(response.body)["Attendee"]["AttendeeId"]).to eq(@attendee_id)
+            end
+
+            it "does not return join token of the attendee" do
+              expect(JSON.parse(response.body)["Attendee"]).not_to have_key("JoinToken")
             end
 
             it "returns application metadata in the attendee" do
@@ -162,6 +190,34 @@ describe ChimeSdk::Controller::Attendees, type: :request do
 
           it "returns created attendee" do
             expect(JSON.parse(response.body)["Attendee"]["AttendeeId"]).to eq(@attendee_id)
+          end
+        end
+
+        context "when the meeting belongs to another private room" do
+          let(:other_meeting_path) { "#{api_path}/meetings/#{@other_meeting_id}" }
+
+          it "returns response with 404 status to GET /meetings/:meeting_id/attendees" do
+            expect(ChimeSdk::MeetingCoordinator).not_to receive(:list_attendees)
+            get "#{other_meeting_path}/attendees", headers: @auth_headers
+            expect(response).to have_http_status(404)
+          end
+
+          it "returns response with 404 status to GET /meetings/:meeting_id/attendees/:attendee_id" do
+            expect(ChimeSdk::MeetingCoordinator).not_to receive(:get_attendee)
+            get "#{other_meeting_path}/attendees/#{@attendee_id}", headers: @auth_headers
+            expect(response).to have_http_status(404)
+          end
+
+          it "returns response with 404 status to POST /meetings/:meeting_id/attendees" do
+            expect(ChimeSdk::MeetingCoordinator).not_to receive(:create_attendee)
+            post "#{other_meeting_path}/attendees", headers: @auth_headers
+            expect(response).to have_http_status(404)
+          end
+
+          it "returns response with 404 status to DELETE /meetings/:meeting_id/attendees/:attendee_id" do
+            expect(ChimeSdk::MeetingCoordinator).not_to receive(:delete_attendee)
+            delete "#{other_meeting_path}/attendees/#{@attendee_id}", headers: @auth_headers
+            expect(response).to have_http_status(404)
           end
         end
 

@@ -64,6 +64,15 @@ module ChimeSdk
     #   @return [Boolean] Whether the application creates meeting in meetings#index action by HTTP GET request
     attr_accessor :create_meeting_by_get_request
 
+    # @overload verify_meeting_request_id
+    #   Return whether the controllers verify that requested meetings were created with ChimeSdk.config.prefix + meeting_request_id.
+    #   @return [Boolean] Whether the controllers verify that requested meetings were created with ChimeSdk.config.prefix + meeting_request_id
+    # @overload verify_meeting_request_id=(value)
+    #   Set whether the controllers verify that requested meetings were created with ChimeSdk.config.prefix + meeting_request_id.
+    #   @param [Boolean] verify_meeting_request_id The new verify_meeting_request_id
+    #   @return [Boolean] Whether the controllers verify that requested meetings were created with ChimeSdk.config.prefix + meeting_request_id
+    attr_accessor :verify_meeting_request_id
+
     # Initialize configuration for ChimeSdk.
     # These configuration can be overridden in initializer.
     # @return [Config] A new instance of Config
@@ -75,6 +84,7 @@ module ChimeSdk
       @create_meeting_with_attendee  = true
       @create_attendee_from_meeting  = true
       @create_meeting_by_get_request = false
+      @verify_meeting_request_id     = true
     end
   end
 end

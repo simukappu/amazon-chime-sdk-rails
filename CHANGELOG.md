@@ -1,3 +1,13 @@
+## 2.2.0 / Unreleased
+[Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.1.0...v2.2.0)
+
+Security Fixes:
+
+* Verify that requested meetings belong to the requesting resource. Meetings and attendees controllers now respond with 404 when the meeting's `ExternalMeetingId` is not `config.prefix + meeting_request_id`, so users can no longer get, delete, or join meetings of other resources (such as other private rooms) by meeting ID
+  * Attendees controllers must now define `meeting_request_id` with the same value as the meetings controller. The generated attendees controller template includes it
+  * Set `config.verify_meeting_request_id = false`, or override `verify_meeting_request_id?` in a controller, to restore the previous behavior
+* Do not return `JoinToken` from attendees `index` and `show` actions. A join token is the credential to join a meeting as that attendee, so other participants could impersonate the attendee
+
 ## 2.1.0 / 2026-04-11
 [Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.0.1...v2.1.0)
 

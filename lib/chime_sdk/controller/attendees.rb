@@ -12,15 +12,17 @@ module ChimeSdk
         end
     
         # GET /meetings/:meeting_id/attendees
+        # Join tokens are omitted since they are credentials of each attendee.
         def index
           list_attendees
-          render json: { attendees: @attendees }
+          render json: { attendees: @attendees.map { |attendee| without_join_token(attendee) } }
         end
 
         # GET /meetings/:meeting_id/attendees/:attendee_id
+        # The join token is omitted since it is a credential of the attendee.
         def show
           get_attendee
-          render json: @attendee
+          render json: without_join_token(@attendee)
         end
 
         # POST /meetings/:meeting_id/attendees
@@ -53,6 +55,16 @@ module ChimeSdk
         # @return [String, Integer] Attendee id from request parameter
         def attendee_id_param
           params[:id]
+        end
+
+        # Unique meeting request id to identify meeting by Amazon Chime.
+        # Configure it depending on your application resources to identify meeting.
+        # For example, set "PrivateRoom-#{@room.id}" by Room model.
+        # Requested meetings are verified with this id when ChimeSdk.config.verify_meeting_request_id is enabled.
+        # @api protected
+        # @return [String] Unique meeting request id to identify meeting by Amazon Chime
+        def meeting_request_id
+          "default"
         end
 
         # Unique attendee request id to identify attendee by Amazon Chime.

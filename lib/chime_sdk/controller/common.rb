@@ -1,6 +1,9 @@
 module ChimeSdk
   # Controllers implementation by amazon-chime-sdk-rails.
   module Controller
+    # Error raised when the requested meeting is not the meeting identified by meeting_request_id.
+    class MeetingNotFoundError < StandardError; end
+
     # Common implementation for controllers.
     module Common
       extend ActiveSupport::Concern
@@ -9,6 +12,7 @@ module ChimeSdk
         rescue_from Aws::ChimeSDKMeetings::Errors::ForbiddenException, with: :render_forbidden
         rescue_from Aws::ChimeSDKMeetings::Errors::NotFoundException, with: :render_resource_not_found
         rescue_from Aws::ChimeSDKMeetings::Errors::ValidationException, with: :render_resource_not_found
+        rescue_from ChimeSdk::Controller::MeetingNotFoundError, with: :render_resource_not_found
 
         class ::String
           # Convets to boolean.
@@ -51,7 +55,7 @@ module ChimeSdk
       # @api protected
       # @return [Hash] Meeting
       def get_meeting
-        @meeting = ChimeSdk::MeetingCoordinator.get_meeting(meeting_id)
+        @meeting = verify_meeting(ChimeSdk::MeetingCoordinator.get_meeting(meeting_id))
         @meeting = merge_application_meeting_metadata(@meeting)
       end
 
@@ -59,13 +63,43 @@ module ChimeSdk
       # @api protected
       # @return [void]
       def delete_meeting
+        verify_meeting_id
         ChimeSdk::MeetingCoordinator.delete_meeting(meeting_id)
+      end
+
+      # Whether to verify that requested meetings were created with ChimeSdk.config.prefix + meeting_request_id.
+      # Override it to change the behavior for each controller.
+      # @api protected
+      # @return [Boolean] Whether to verify requested meetings
+      def verify_meeting_request_id?
+        ChimeSdk.config.verify_meeting_request_id
+      end
+
+      # Verify that the meeting was created with ChimeSdk.config.prefix + meeting_request_id.
+      # @api protected
+      # @param [Hash] meeting Meeting JSON object as hash
+      # @return [Hash] Verified meeting
+      # @raise [ChimeSdk::Controller::MeetingNotFoundError] When the meeting is not the meeting identified by meeting_request_id
+      def verify_meeting(meeting)
+        if verify_meeting_request_id? && meeting.dig(:Meeting, :ExternalMeetingId) != ChimeSdk.config.prefix + meeting_request_id
+          raise ChimeSdk::Controller::MeetingNotFoundError, "Meeting not found"
+        end
+        meeting
+      end
+
+      # Verify the requested meeting by meeting id unless it has already been verified.
+      # @api protected
+      # @return [void]
+      # @raise [ChimeSdk::Controller::MeetingNotFoundError] When the meeting is not the meeting identified by meeting_request_id
+      def verify_meeting_id
+        verify_meeting(ChimeSdk::MeetingCoordinator.get_meeting(meeting_id)) if @meeting.nil? && verify_meeting_request_id?
       end
 
       # List attendees by MeetingCoordinator.
       # @api protected
       # @return [Array<Hash>] Attendee list
       def list_attendees
+        verify_meeting_id
         @attendees = ChimeSdk::MeetingCoordinator.list_attendees(meeting_id)
         @attendees = @attendees.map { |attendee| merge_application_attendee_metadata(attendee) }
       end
@@ -74,6 +108,7 @@ module ChimeSdk
       # @api protected
       # @return [Hash] Created attendee
       def create_attendee
+        verify_meeting_id
         @attendee = ChimeSdk::MeetingCoordinator.create_attendee(meeting_id, attendee_request_id)
         @attendee = merge_application_attendee_metadata(@attendee)
       end
@@ -82,6 +117,7 @@ module ChimeSdk
       # @api protected
       # @return [Hash] Attendee
       def get_attendee
+        verify_meeting_id
         @attendee = ChimeSdk::MeetingCoordinator.get_attendee(meeting_id, attendee_id)
         @attendee = merge_application_attendee_metadata(@attendee)
       end
@@ -90,6 +126,7 @@ module ChimeSdk
       # @api protected
       # @return [void]
       def delete_attendee
+        verify_meeting_id
         ChimeSdk::MeetingCoordinator.delete_attendee(meeting_id, attendee_id)
       end
 
@@ -152,6 +189,15 @@ module ChimeSdk
       def merge_application_attendee_metadata(attendee)
         attendee[:Attendee][:ApplicationMetadata] = application_attendee_metadata(attendee)
         attendee
+      end
+
+      # Return attendee without its join token.
+      # Join token is a credential to join the meeting as the attendee and must not be returned to other users.
+      # @api protected
+      # @param [Hash] attendee Attendee JSON object as hash
+      # @return [Hash] Attendee without join token
+      def without_join_token(attendee)
+        attendee.merge(Attendee: attendee[:Attendee].except(:JoinToken))
       end
 
       # Returns error response as Hash

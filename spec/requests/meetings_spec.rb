@@ -3,8 +3,10 @@ describe ChimeSdk::Controller::Meetings, type: :request do
     @meeting_id       = "01234567-89ab-cdef-ghij-klmnopqrstuv"
     @attendee_id      = "76543210-ba98-fedc-jihg-vutsrqponmlk"
     @dummy_meeting_id = "91234567-89ab-cdef-ghij-klmnopqrstuv"
+    @other_meeting_id = "81234567-89ab-cdef-ghij-klmnopqrstuv"
 
     @room = create(:room)
+    @other_room = create(:room)
     dummy_media_placement = {
       audio_host_url: "dummy",
       audio_fallback_url: "dummy",
@@ -51,10 +53,19 @@ describe ChimeSdk::Controller::Meetings, type: :request do
       meeting_arn: "arn:aws:chime:us-east-1:000000000000:meeting/#{@meeting_id}"
     }
 
+    other_room_meeting = test_meeting.merge(
+      meeting_id: @other_meeting_id,
+      external_meeting_id: "ChimeSdkRailsApp-test-PrivateRoom-#{@other_room.id}"
+    )
+
     # Use stubs for the AWS SDK for Ruby
     client = Aws::ChimeSDKMeetings::Client.new(stub_responses: true)
     client.stub_responses(:get_meeting, -> (context) {
-      context.params[:meeting_id] == @meeting_id ? { meeting: test_meeting } : 'NotFoundException'
+      case context.params[:meeting_id]
+      when @meeting_id then { meeting: test_meeting }
+      when @other_meeting_id then { meeting: other_room_meeting }
+      else 'NotFoundException'
+      end
     })
     client.stub_responses(:create_meeting, {
       meeting: test_meeting
@@ -178,6 +189,36 @@ describe ChimeSdk::Controller::Meetings, type: :request do
               expect(response).to have_http_status(404)
             end
           end
+
+          context "when the meeting belongs to another private room" do
+            before do
+              get "#{api_path}/meetings/#{@other_meeting_id}", headers: @auth_headers
+            end
+
+            it "returns response with 404 status" do
+              expect(response).to have_http_status(404)
+            end
+
+            it "does not return the meeting" do
+              expect(JSON.parse(response.body)["Meeting"]).to be_nil
+            end
+          end
+
+          context "when the meeting belongs to another private room and ChimeSdk.config.verify_meeting_request_id is disabled" do
+            before do
+              ChimeSdk.config.verify_meeting_request_id = false
+              get "#{api_path}/meetings/#{@other_meeting_id}", params: { create_attendee_from_meeting: false }, headers: @auth_headers
+            end
+
+            after do
+              ChimeSdk.config.verify_meeting_request_id = true
+            end
+
+            it "returns the meeting" do
+              expect(response).to have_http_status(200)
+              expect(JSON.parse(response.body)["Meeting"]["MeetingId"]).to eq(@other_meeting_id)
+            end
+          end
         end
 
         describe "POST /meetings" do
@@ -240,6 +281,14 @@ describe ChimeSdk::Controller::Meetings, type: :request do
             end
 
             it "returns response with 404 status" do
+              expect(response).to have_http_status(404)
+            end
+          end
+
+          context "when the meeting belongs to another private room" do
+            it "returns response with 404 status without deleting the meeting" do
+              expect(ChimeSdk::MeetingCoordinator).not_to receive(:delete_meeting)
+              delete "#{api_path}/meetings/#{@other_meeting_id}", headers: @auth_headers
               expect(response).to have_http_status(404)
             end
           end
