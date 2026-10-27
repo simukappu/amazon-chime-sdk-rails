@@ -16,9 +16,9 @@ module ChimeSdk
         # GET /meetings.json
         # @overload index(params)
         #   @param [Hash] params Request parameter options
-        #   @option params [String] :create_meeting (ChimeSdk.config.create_meeting_by_get_request) Whether the application creates meeting in this meetings#index action by HTTP GET request
+        #   @option params [String] :create_meeting (ChimeSdk.config.create_meeting_by_get_request) Whether the application creates meeting in this meetings#index action by HTTP GET request. This parameter can only disable it since GET requests are not protected from CSRF.
         def index
-          if params[:create_meeting].to_s.to_boolean(false) || ChimeSdk.config.create_meeting_by_get_request && params[:create_meeting].to_s.to_boolean(true)
+          if ChimeSdk.config.create_meeting_by_get_request && params[:create_meeting].to_s.to_boolean(true)
             create
           else
             @meeting_request_id = ChimeSdk.config.prefix + meeting_request_id
@@ -34,10 +34,10 @@ module ChimeSdk
         # GET /meetings/:meeting_id.json
         # @overload show(params)
         #   @param [Hash] params Request parameter options
-        #   @option params [String] :create_attendee_from_meeting (ChimeSdk.config.create_attendee_from_meeting) Whether the application creates attendee from meeting in meetings#show action
+        #   @option params [String] :create_attendee_from_meeting (ChimeSdk.config.create_attendee_from_meeting) Whether the application creates attendee from meeting in meetings#show action. This parameter can only disable it since GET requests are not protected from CSRF.
         def show
           get_meeting
-          if params[:create_attendee_from_meeting].to_s.to_boolean(false) || ChimeSdk.config.create_attendee_from_meeting && params[:create_attendee_from_meeting].to_s.to_boolean(true)
+          if ChimeSdk.config.create_attendee_from_meeting && params[:create_attendee_from_meeting].to_s.to_boolean(true)
             create_attendee_from_meeting
           end
           respond_to do |format|

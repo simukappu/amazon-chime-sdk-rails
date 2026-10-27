@@ -8,11 +8,7 @@
 <p>
   <strong>Private Meeting:</strong>
   <p><%= link_to 'Show Meetings Index', room_meetings_path(@room) %></p>
-  <p>
-    Create Meeting
-    <%= link_to 'GET', room_meetings_path(@room, create_meeting: true) %>
-    <%= link_to 'POST', room_meetings_path(@room), method: :post %>
-  </p>
+  <p><%= link_to 'Create Meeting', room_meetings_path(@room), method: :post %></p>
 </p>
 
 <p>

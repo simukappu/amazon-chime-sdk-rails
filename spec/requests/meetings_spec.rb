@@ -142,17 +142,36 @@ describe ChimeSdk::Controller::Meetings, type: :request do
             end
           end
 
-          context "with true as create_meeting parameter" do
+          context "with true as create_meeting parameter and ChimeSdk.config.create_meeting_by_get_request is disabled" do
             before do
               get "#{api_path}/meetings", headers: @auth_headers, params: { create_meeting: true }
             end
 
-            it "returns response with 201 status" do
-              expect(response).to have_http_status(201)
+            it "does not create meeting" do
+              expect(response).to have_http_status(200)
+              expect(JSON.parse(response.body)["Meeting"]).to be_nil
+            end
+          end
+
+          context "when ChimeSdk.config.create_meeting_by_get_request is enabled" do
+            before do
+              ChimeSdk.config.create_meeting_by_get_request = true
             end
 
-            it "returns created meeting" do
+            after do
+              ChimeSdk.config.create_meeting_by_get_request = false
+            end
+
+            it "returns created meeting with 201 status" do
+              get "#{api_path}/meetings", headers: @auth_headers
+              expect(response).to have_http_status(201)
               expect(JSON.parse(response.body)["Meeting"]["MeetingId"]).to eq(@meeting_id)
+            end
+
+            it "does not create meeting with false as create_meeting parameter" do
+              get "#{api_path}/meetings", headers: @auth_headers, params: { create_meeting: false }
+              expect(response).to have_http_status(200)
+              expect(JSON.parse(response.body)["Meeting"]).to be_nil
             end
           end
         end
@@ -187,6 +206,22 @@ describe ChimeSdk::Controller::Meetings, type: :request do
 
             it "returns response with 404 status" do
               expect(response).to have_http_status(404)
+            end
+          end
+
+          context "with true as create_attendee_from_meeting parameter and ChimeSdk.config.create_attendee_from_meeting is disabled" do
+            before do
+              ChimeSdk.config.create_attendee_from_meeting = false
+              get "#{api_path}/meetings/#{@meeting_id}", params: { create_attendee_from_meeting: true }, headers: @auth_headers
+            end
+
+            after do
+              ChimeSdk.config.create_attendee_from_meeting = true
+            end
+
+            it "does not create attendee" do
+              expect(response).to have_http_status(200)
+              expect(JSON.parse(response.body)["Attendee"]).to be_nil
             end
           end
 
@@ -359,16 +394,29 @@ describe ChimeSdk::Controller::Meetings, type: :request do
             end
           end
 
-          context "with true as create_meeting parameter" do
+          context "with true as create_meeting parameter and ChimeSdk.config.create_meeting_by_get_request is disabled" do
             before do
               get "#{api_path}/meetings", params: { create_meeting: true }
             end
 
-            it "returns response with 302 status" do
-              expect(response).to have_http_status(302)
+            it "does not create meeting" do
+              expect(response).to have_http_status(200)
+              expect(response.body).to include("Meetings by Amazon Chime SDK")
+            end
+          end
+
+          context "when ChimeSdk.config.create_meeting_by_get_request is enabled" do
+            before do
+              ChimeSdk.config.create_meeting_by_get_request = true
+              get "#{api_path}/meetings"
+            end
+
+            after do
+              ChimeSdk.config.create_meeting_by_get_request = false
             end
 
             it "redirects to created meeting path" do
+              expect(response).to have_http_status(302)
               expect(response.body).to redirect_to("#{api_path}/meetings/#{@meeting_id}")
             end
           end

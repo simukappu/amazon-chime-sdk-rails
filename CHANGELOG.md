@@ -7,6 +7,7 @@ Security Fixes:
   * Attendees controllers must now define `meeting_request_id` with the same value as the meetings controller. The generated attendees controller template includes it
   * Set `config.verify_meeting_request_id = false`, or override `verify_meeting_request_id?` in a controller, to restore the previous behavior
 * Do not return `JoinToken` from attendees `index` and `show` actions. A join token is the credential to join a meeting as that attendee, so other participants could impersonate the attendee
+* Do not create meetings or attendees by HTTP GET request parameters. `create_meeting` in meetings `index` and `create_attendee_from_meeting` in meetings `show` can now only disable the creation enabled by `config.create_meeting_by_get_request` and `config.create_attendee_from_meeting`, since GET requests are not protected from CSRF
 
 ## 2.1.0 / 2026-04-11
 [Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.0.1...v2.1.0)
