@@ -4,13 +4,17 @@ module ChimeSdk
   module Generators
     # Amazon Chime SDK single .js file generator.
     # Bundle Amazon Chime SDK into single amazon-chime-sdk.min.js file and copy it to app/assets/javascripts directory.
-    # @example Run Amazon Chime SDK single .js file generator with the latest version from master branch
+    # @example Run Amazon Chime SDK single .js file generator with the version in the pinned singlejs package.json
     #   rails generate chime_sdk:js
     # @example Run Amazon Chime SDK single .js file generator with specified version
     #   rails generate chime_sdk:js 2.24.0
     # @see https://github.com/aws-samples/amazon-chime-sdk/tree/main/utils/singlejs
     # @see https://www.npmjs.com/package/amazon-chime-sdk-js
     class JsGenerator < Rails::Generators::Base
+      # Commit of aws-samples/amazon-chime-sdk repository to build the single .js file from.
+      # Pinned since the generator runs npm scripts in the cloned repository.
+      SINGLEJS_REPOSITORY_COMMIT = "6abe76a732c1fce4cce9d2dbbf28946482ac203e"
+
       desc <<-DESC.strip_heredoc
         Bundle Amazon Chime SDK into single amazon-chime-sdk.min.js file and copy it to app/assets/javascripts directory.
 
@@ -76,6 +80,7 @@ module ChimeSdk
         system "mkdir -p tmp"
         puts "Cloning into 'amazon-chime-sdk-js' git repository in tmp directory ..."
         system "cd tmp; git clone https://github.com/aws-samples/amazon-chime-sdk.git > /dev/null 2>&1"
+        system "cd tmp/amazon-chime-sdk; git -c advice.detachedHead=false checkout #{SINGLEJS_REPOSITORY_COMMIT} > /dev/null 2>&1"
         repository_path = "tmp/amazon-chime-sdk"
         singlejs_path = "#{repository_path}/utils/singlejs"
         package_json_path = "#{singlejs_path}/package.json"
