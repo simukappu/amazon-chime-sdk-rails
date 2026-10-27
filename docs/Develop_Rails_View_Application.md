@@ -251,7 +251,7 @@ class MeetingsController < ApplicationController
     "PrivateRoom-#{@room.id}"
   end
 
-  # Uncomment
+  # Update (replace raise NotImplementedError)
   def attendee_request_id
     "User-#{current_user.id}"
   end
@@ -304,7 +304,7 @@ class MeetingAttendeesController < ApplicationController
     "PrivateRoom-#{@room.id}"
   end
 
-  # Uncomment
+  # Update (replace raise NotImplementedError)
   def attendee_request_id
     "User-#{current_user.id}"
   end

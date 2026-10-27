@@ -185,7 +185,7 @@ class Api::MeetingsController < ApplicationController
     "PrivateRoom-#{@room.id}"
   end
 
-  # Uncomment and update
+  # Update (replace raise NotImplementedError)
   def attendee_request_id
     "User-#{current_api_user.id}"
   end
@@ -239,7 +239,7 @@ class Api::MeetingAttendeesController < ApplicationController
     "PrivateRoom-#{@room.id}"
   end
 
-  # Uncomment and update
+  # Update (replace raise NotImplementedError)
   def attendee_request_id
     "User-#{current_api_user.id}"
   end

@@ -29,6 +29,8 @@ describe ChimeSdk::Generators::ControllersGenerator, type: :generator do
         it { is_expected.to exist }
         it { is_expected.to contain(/class MeetingAttendeesController < ApplicationController/) }
         it { is_expected.to contain(" meetings_path(params)\n") }
+        it { is_expected.to contain("  def meeting_request_id\n    # \"PrivateRoom-\#{@room.id}\"\n    \"default\"\n") }
+        it { is_expected.to contain("  def attendee_request_id\n    # \"User-\#{current_user.id}\"\n    raise NotImplementedError") }
       end
     end
 

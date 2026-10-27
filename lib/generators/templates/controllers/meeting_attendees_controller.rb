@@ -37,11 +37,12 @@ class <%= @namespace %><%= @class_name_prefix %>MeetingAttendeesController < App
   # Unique attendee request id to identify attendee by Amazon Chime.
   # Configure it depending on your application resources to identify attendee.
   # For example, set "User-#{current_user.id}" by User model.
+  # Each user must have a different value, since users with the same value join meetings as the same attendee.
   # @api protected
   # @return [String] Unique attendee request id to identify attendee by Amazon Chime
   def attendee_request_id
     # "User-#{current_user.id}"
-    "default"
+    raise NotImplementedError, "Define attendee_request_id in #{self.class.name} to identify each attendee, e.g. \"User-\#{current_user.id}\""
   end
 
   # Path for meetings#index action such as meetings_path.
