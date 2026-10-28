@@ -60,7 +60,8 @@
   // Open customized React Meeting Demo
   // https://github.com/simukappu/amazon-chime-sdk/tree/main/apps/meeting
   function openReactMeetingDemo() {
-    window.open(`${reactMeetingDemoUrl}?preparedApiEndpoint=${window.location.origin}/api/v1/public/meetings&preparedMeetingId=${meeting.Meeting.MeetingId}&preparedAttendeeId=${attendee.Attendee.AttendeeId}`, '_blank').focus();
+    // Pass the join token in the URL fragment, which is not sent to servers, since the public API does not return join tokens
+    window.open(`${reactMeetingDemoUrl}?preparedApiEndpoint=${window.location.origin}/api/v1/public/meetings&preparedMeetingId=${meeting.Meeting.MeetingId}&preparedAttendeeId=${attendee.Attendee.AttendeeId}#preparedJoinToken=${encodeURIComponent(attendee.Attendee.JoinToken)}`, '_blank', 'noopener');
   }
 
   const reactMeetingDemoUrl = document.getElementById('react_meeting_demo_url').getAttribute('url');
