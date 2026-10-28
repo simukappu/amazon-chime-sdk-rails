@@ -194,6 +194,10 @@ describe ChimeSdk::Controller::Meetings, type: :request do
               expect(JSON.parse(response.body)["Meeting"]["ApplicationMetadata"]["PrivateRoom"]["id"]).to eq(@room.id)
             end
 
+            it "returns only id and name of the room in application metadata" do
+              expect(JSON.parse(response.body)["Meeting"]["ApplicationMetadata"]["PrivateRoom"].keys).to match_array(["id", "name"])
+            end
+
             it "returns created attendee since ChimeSdk.config.create_attendee_from_meeting is enabled" do
               expect(JSON.parse(response.body)["Attendee"]["AttendeeId"]).to eq(@attendee_id)
             end

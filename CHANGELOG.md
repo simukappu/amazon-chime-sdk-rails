@@ -1,3 +1,11 @@
+## 2.2.1 / Unreleased
+[Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.2.0...v2.2.1)
+
+Security Fixes:
+
+* Return only `id` and `name` of users and rooms in the application metadata examples of the generated controller templates and the docs, instead of serializing whole records such as email addresses to all meeting participants
+* Resolve user and room IDs in the application metadata examples by removing `config.prefix` from `ExternalUserId` and `ExternalMeetingId`, instead of `split('-')[3]`. Attendees and meetings created with other prefixes, such as other applications or environments, are no longer resolved to local records
+
 ## 2.2.0 / 2026-10-28
 [Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.1.0...v2.2.0)
 

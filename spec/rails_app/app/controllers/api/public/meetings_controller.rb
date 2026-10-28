@@ -6,10 +6,10 @@ class Api::Public::MeetingsController < ApplicationController
   end
 
   def application_meeting_metadata(meeting)
-    room_id = meeting[:Meeting][:ExternalMeetingId].split('-')[3]
+    room_id = meeting[:Meeting][:ExternalMeetingId].delete_prefix(ChimeSdk.config.prefix)[/\APrivateRoom-(\d+)\z/, 1]
     {
       "MeetingType": "PrivateRoom",
-      "PrivateRoom": Room.find_by_id(room_id)
+      "PrivateRoom": Room.find_by_id(room_id)&.slice(:id, :name)
     }
   end
 

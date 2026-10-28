@@ -5,6 +5,7 @@ describe ChimeSdk::Controller::Attendees, type: :request do
     @dummy_meeting_id  = "91234567-89ab-cdef-ghij-klmnopqrstuv"
     @dummy_attendee_id = "96543210-ba98-fedc-jihg-vutsrqponmlk"
     @other_meeting_id  = "81234567-89ab-cdef-ghij-klmnopqrstuv"
+    @other_app_attendee_id = "86543210-ba98-fedc-jihg-vutsrqponmlk"
 
     @room = create(:room)
     @other_room = create(:room)
@@ -40,6 +41,11 @@ describe ChimeSdk::Controller::Attendees, type: :request do
       }
     }
 
+    other_app_attendee = test_attendee.merge(
+      external_user_id: "OtherApp-test-User-#{@attendee_user.id}",
+      attendee_id: @other_app_attendee_id
+    )
+
     # Use stubs for the AWS SDK for Ruby
     client = Aws::ChimeSDKMeetings::Client.new(stub_responses: true)
     client.stub_responses(:get_meeting, -> (context) {
@@ -54,7 +60,11 @@ describe ChimeSdk::Controller::Attendees, type: :request do
     })
     client.stub_responses(:get_attendee, -> (context) {
       context.params[:meeting_id] == @meeting_id ?
-        (context.params[:attendee_id] == @attendee_id ? { attendee: test_attendee } : 'NotFoundException') :
+        (case context.params[:attendee_id]
+         when @attendee_id then { attendee: test_attendee }
+         when @other_app_attendee_id then { attendee: other_app_attendee }
+         else 'NotFoundException'
+         end) :
         'ForbiddenException'
     })
     client.stub_responses(:create_attendee, -> (context) {
@@ -155,6 +165,21 @@ describe ChimeSdk::Controller::Attendees, type: :request do
 
             it "returns application metadata in the attendee" do
               expect(JSON.parse(response.body)["Attendee"]["ApplicationMetadata"]["User"]["id"]).to eq(@attendee_user.id)
+            end
+
+            it "returns only id and name of the user in application metadata" do
+              expect(JSON.parse(response.body)["Attendee"]["ApplicationMetadata"]["User"].keys).to match_array(["id", "name"])
+            end
+          end
+
+          context "when the attendee is created by another application" do
+            before do
+              get "#{api_meetings_path}/attendees/#{@other_app_attendee_id}", headers: @auth_headers
+            end
+
+            it "does not resolve the user from external user id" do
+              expect(response).to have_http_status(200)
+              expect(JSON.parse(response.body)["Attendee"]["ApplicationMetadata"]["User"]).to be_nil
             end
           end
 

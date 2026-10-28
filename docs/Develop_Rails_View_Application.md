@@ -260,16 +260,16 @@ class MeetingsController < ApplicationController
   def application_meeting_metadata(meeting)
     {
       "MeetingType": "PrivateRoom",
-      "PrivateRoom": @room
+      "PrivateRoom": @room.slice(:id, :name)
     }
   end
 
   # Uncomment
   def application_attendee_metadata(attendee)
-    user_id = attendee[:Attendee][:ExternalUserId].split('-')[3]
+    user_id = attendee[:Attendee][:ExternalUserId].delete_prefix(ChimeSdk.config.prefix)[/\AUser-(\d+)\z/, 1]
     {
       "AttendeeType": "User",
-      "User": User.find_by_id(user_id)
+      "User": User.find_by_id(user_id)&.slice(:id, :name)
     }
   end
 end
@@ -311,10 +311,10 @@ class MeetingAttendeesController < ApplicationController
 
   # Uncomment
   def application_attendee_metadata(attendee)
-    user_id = attendee[:Attendee][:ExternalUserId].split('-')[3]
+    user_id = attendee[:Attendee][:ExternalUserId].delete_prefix(ChimeSdk.config.prefix)[/\AUser-(\d+)\z/, 1]
     {
       "AttendeeType": "User",
-      "User": User.find_by_id(user_id)
+      "User": User.find_by_id(user_id)&.slice(:id, :name)
     }
   end
 end

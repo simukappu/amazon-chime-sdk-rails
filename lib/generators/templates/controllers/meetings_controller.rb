@@ -118,7 +118,7 @@ class <%= @namespace %><%= @class_name_prefix %>MeetingsController < Application
   # def application_meeting_metadata(meeting)
   #   {
   #     "MeetingType": "PrivateRoom",
-  #     "PrivateRoom": @room
+  #     "PrivateRoom": @room.slice(:id, :name)
   #   }
   # end
 
@@ -128,10 +128,10 @@ class <%= @namespace %><%= @class_name_prefix %>MeetingsController < Application
   # @param [Hash] meeting Attendee JSON object as hash
   # @return [Hash] Appication metadata for attendees
   # def application_attendee_metadata(attendee)
-  #   user_id = attendee[:Attendee][:ExternalUserId].split('-')[3]
+  #   user_id = attendee[:Attendee][:ExternalUserId].delete_prefix(ChimeSdk.config.prefix)[/\AUser-(\d+)\z/, 1]
   #   {
   #     "AttendeeType": "User",
-  #     "User": User.find_by_id(user_id)
+  #     "User": User.find_by_id(user_id)&.slice(:id, :name)
   #   }
   # end
 

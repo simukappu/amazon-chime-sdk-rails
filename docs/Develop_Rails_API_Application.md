@@ -194,16 +194,16 @@ class Api::MeetingsController < ApplicationController
   def application_meeting_metadata(meeting)
     {
       "MeetingType": "PrivateRoom",
-      "PrivateRoom": @room
+      "PrivateRoom": @room.slice(:id, :name)
     }
   end
 
   # Uncomment
   def application_attendee_metadata(attendee)
-    user_id = attendee[:Attendee][:ExternalUserId].split('-')[3]
+    user_id = attendee[:Attendee][:ExternalUserId].delete_prefix(ChimeSdk.config.prefix)[/\AUser-(\d+)\z/, 1]
     {
       "AttendeeType": "User",
-      "User": User.find_by_id(user_id)
+      "User": User.find_by_id(user_id)&.slice(:id, :name)
     }
   end
 end
@@ -246,10 +246,10 @@ class Api::MeetingAttendeesController < ApplicationController
 
   # Uncomment
   def application_attendee_metadata(attendee)
-    user_id = attendee[:Attendee][:ExternalUserId].split('-')[3]
+    user_id = attendee[:Attendee][:ExternalUserId].delete_prefix(ChimeSdk.config.prefix)[/\AUser-(\d+)\z/, 1]
     {
       "AttendeeType": "User",
-      "User": User.find_by_id(user_id)
+      "User": User.find_by_id(user_id)&.slice(:id, :name)
     }
   end
 end
@@ -360,37 +360,9 @@ $ curl localhost:3000/api/v1/rooms/1/meetings -X POST -H "content-type:applicati
     "MediaRegion": "us-east-1",
     "ApplicationMetadata": {
       "MeetingType": "PrivateRoom",
-      "Room": {
+      "PrivateRoom": {
         "id": 1,
-        "name": "PrivateRoom-1",
-        "created_at": "2020-10-16T11:15:56.223Z",
-        "updated_at": "2020-10-16T11:15:56.223Z",
-        "members": [
-          {
-            "id": 1,
-            "provider": "email",
-            "uid": "ichiro@example.com",
-            "allow_password_change": false,
-            "name": "ichiro",
-            "nickname": null,
-            "image": null,
-            "email": "ichiro@example.com",
-            "created_at": "2020-10-16T11:14:48.731Z",
-            "updated_at": "2020-10-16T11:16:56.927Z"
-          },
-          {
-            "id": 2,
-            "provider": "email",
-            "uid": "stephen@example.com",
-            "allow_password_change": false,
-            "name": "stephen",
-            "nickname": null,
-            "image": null,
-            "email": "stephen@example.com",
-            "created_at": "2020-10-16T11:15:33.226Z",
-            "updated_at": "2020-10-16T11:15:33.314Z"
-          }
-        ]
+        "name": "PrivateRoom-1"
       }
     }
   },
@@ -402,15 +374,7 @@ $ curl localhost:3000/api/v1/rooms/1/meetings -X POST -H "content-type:applicati
       "AttendeeType": "User",
       "User": {
         "id": 1,
-        "provider": "email",
-        "uid": "ichiro@example.com",
-        "allow_password_change": false,
-        "name": "ichiro",
-        "nickname": null,
-        "image": null,
-        "email": "ichiro@example.com",
-        "created_at": "2020-10-16T11:14:48.731Z",
-        "updated_at": "2020-10-16T11:16:56.927Z"
+        "name": "ichiro"
       }
     }
   }
@@ -428,20 +392,11 @@ $ curl localhost:3000/api/v1/rooms/1/meetings/${MEETING_ID}/attendees -H "conten
       "Attendee": {
         "ExternalUserId": "ChimeSdkRailsApp-development-User-1",
         "AttendeeId": "b581c46d-661f-92bb-d80e-XXXXXXXXXXXX",
-        "JoinToken": "YjU4MWM0NmQtNjYxZi05MmJiLWQ4MGUtZjRiMTU3ZDk1ZmU5OjgyZmM2NTMxLTIwMjctNGMxMS04OTE0LTQwZjXXXXXXXXXXXX",
         "ApplicationMetadata": {
           "AttendeeType": "User",
           "User": {
             "id": 1,
-            "provider": "email",
-            "uid": "ichiro@example.com",
-            "allow_password_change": false,
-            "name": "ichiro",
-            "nickname": null,
-            "image": null,
-            "email": "ichiro@example.com",
-            "created_at": "2020-10-16T11:14:48.731Z",
-            "updated_at": "2020-10-16T11:16:56.927Z"
+            "name": "ichiro"
           }
         }
       }
@@ -457,20 +412,11 @@ $ curl localhost:3000/api/v1/rooms/1/meetings/${MEETING_ID}/attendees/${ATTENDEE
   "Attendee": {
     "ExternalUserId": "ChimeSdkRailsApp-development-User-1",
     "AttendeeId": "b581c46d-661f-92bb-d80e-XXXXXXXXXXXX",
-    "JoinToken": "YjU4MWM0NmQtNjYxZi05MmJiLWQ4MGUtZjRiMTU3ZDk1ZmU5OjgyZmM2NTMxLTIwMjctNGMxMS04OTE0LTQwZjXXXXXXXXXXXX",
     "ApplicationMetadata": {
       "AttendeeType": "User",
       "User": {
         "id": 1,
-        "provider": "email",
-        "uid": "ichiro@example.com",
-        "allow_password_change": false,
-        "name": "ichiro",
-        "nickname": null,
-        "image": null,
-        "email": "ichiro@example.com",
-        "created_at": "2020-10-16T11:14:48.731Z",
-        "updated_at": "2020-10-16T11:16:56.927Z"
+        "name": "ichiro"
       }
     }
   }
@@ -506,37 +452,9 @@ $ curl localhost:3000/api/v1/rooms/1/meetings -X POST -H "content-type:applicati
     "MediaRegion": "us-east-1",
     "ApplicationMetadata": {
       "MeetingType": "PrivateRoom",
-      "Room": {
+      "PrivateRoom": {
         "id": 1,
-        "name": "PrivateRoom-1",
-        "created_at": "2020-10-16T11:15:56.223Z",
-        "updated_at": "2020-10-16T11:15:56.223Z",
-        "members": [
-          {
-            "id": 1,
-            "provider": "email",
-            "uid": "ichiro@example.com",
-            "allow_password_change": false,
-            "name": "ichiro",
-            "nickname": null,
-            "image": null,
-            "email": "ichiro@example.com",
-            "created_at": "2020-10-16T11:14:48.731Z",
-            "updated_at": "2020-10-16T11:16:56.927Z"
-          },
-          {
-            "id": 2,
-            "provider": "email",
-            "uid": "stephen@example.com",
-            "allow_password_change": false,
-            "name": "stephen",
-            "nickname": null,
-            "image": null,
-            "email": "stephen@example.com",
-            "created_at": "2020-10-16T11:15:33.226Z",
-            "updated_at": "2020-10-16T11:21:46.011Z"
-          }
-        ]
+        "name": "PrivateRoom-1"
       }
     }
   },
@@ -548,15 +466,7 @@ $ curl localhost:3000/api/v1/rooms/1/meetings -X POST -H "content-type:applicati
       "AttendeeType": "User",
       "User": {
         "id": 2,
-        "provider": "email",
-        "uid": "stephen@example.com",
-        "allow_password_change": false,
-        "name": "stephen",
-        "nickname": null,
-        "image": null,
-        "email": "stephen@example.com",
-        "created_at": "2020-10-16T11:15:33.226Z",
-        "updated_at": "2020-10-16T11:21:46.011Z"
+        "name": "stephen"
       }
     }
   }

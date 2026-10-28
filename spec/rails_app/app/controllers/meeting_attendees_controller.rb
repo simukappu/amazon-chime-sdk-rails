@@ -122,10 +122,10 @@ class MeetingAttendeesController < ApplicationController
   # @param [Hash] meeting Attendee JSON object as hash
   # @return [Hash] Appication metadata for attendees
   def application_attendee_metadata(attendee)
-    user_id = attendee[:Attendee][:ExternalUserId].split('-')[3]
+    user_id = attendee[:Attendee][:ExternalUserId].delete_prefix(ChimeSdk.config.prefix)[/\AUser-(\d+)\z/, 1]
     {
       "AttendeeType": "User",
-      "User": User.find_by_id(user_id)
+      "User": User.find_by_id(user_id)&.slice(:id, :name)
     }
   end
 end
