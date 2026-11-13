@@ -68,3 +68,24 @@ jobs:
       - name: Run tests with RSpec
         run: bundle exec rspec
         continue-on-error: ${{ matrix.allow_failures == 'true' }}
+      - name: Coveralls
+        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
+        continue-on-error: true
+        with:
+          file: coverage/lcov.info
+          format: lcov
+          parallel: true
+          flag-name: ${{ matrix.gemfile }}-${{ matrix.ruby-version }}
+          fail-on-error: false
+
+  coveralls:
+    needs: build
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Finish Coveralls parallel build
+        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
+        continue-on-error: true
+        with:
+          parallel-finished: true
+          fail-on-error: false

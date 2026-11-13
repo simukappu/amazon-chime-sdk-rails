@@ -18,7 +18,7 @@ group :development do
 end
 
 group :test do
-  gem 'coveralls_reborn', require: false
+  gem 'simplecov-lcov', require: false
 end
 
 gem 'rack-cors', groups: [:production, :development]

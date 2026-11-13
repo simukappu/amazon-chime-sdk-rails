@@ -1,13 +1,19 @@
 ENV["RAILS_ENV"] ||= "test"
 
 require 'simplecov'
-require 'coveralls'
-Coveralls.wear!
+require 'simplecov-lcov'
+# Write an LCOV report for the Coveralls GitHub Action. It respects :nocov: blocks, unlike .resultset.json
+SimpleCov::Formatter::LcovFormatter.config do |config|
+  config.report_with_single_file = true
+  config.single_report_path = 'coverage/lcov.info'
+end
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new [
   SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
+  SimpleCov::Formatter::LcovFormatter
 ]
 SimpleCov.start('rails') do
+  # Fail CI builds when line coverage of each job drops below 100%
+  minimum_coverage 100 if ENV['CI']
   add_filter '/spec/'
   add_filter '/lib/generators/templates/'
   add_filter '/lib/chime_sdk/version'

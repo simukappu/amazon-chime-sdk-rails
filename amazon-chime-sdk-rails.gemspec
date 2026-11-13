@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-rails', '>= 6.0.0'
   s.add_development_dependency 'factory_bot_rails', '>= 6.2.0'
   s.add_development_dependency 'ammeter', '>= 1.1.5'
+  s.add_development_dependency 'simplecov', '~> 0'
   s.add_development_dependency 'yard', '>= 0.9.36'
   s.add_development_dependency 'devise_token_auth', '>= 1.2.2'
 end
