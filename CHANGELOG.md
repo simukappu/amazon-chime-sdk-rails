@@ -1,3 +1,10 @@
+## 2.2.2 / Unreleased
+[Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.2.1...v2.2.2)
+
+Bug Fixes:
+
+* Pass the attendee's join token to the customized React Meeting Demo in the URL fragment from the example application, since the public API no longer returns join tokens of attendees as of 2.2.0
+
 ## 2.2.1 / 2026-10-28
 [Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.2.0...v2.2.1)
 
