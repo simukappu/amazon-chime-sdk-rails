@@ -1,4 +1,4 @@
-## 2.2.3 / Unreleased
+## 2.2.3 / 2026-11-13
 [Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.2.2...v2.2.3)
 
 Bug Fixes:
