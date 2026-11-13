@@ -1,3 +1,10 @@
+## 2.2.3 / Unreleased
+[Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.2.2...v2.2.3)
+
+Bug Fixes:
+
+* Fix `NoMethodError` in meeting responses when only some of the meeting features (audio, video, content and attendee) are returned. Features which are not returned are now `nil` in `MeetingFeatures`
+
 ## 2.2.2 / 2026-11-13
 [Full Changelog](http://github.com/simukappu/amazon-chime-sdk-rails/compare/v2.2.1...v2.2.2)
 

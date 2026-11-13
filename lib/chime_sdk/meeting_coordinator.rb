@@ -173,18 +173,19 @@ module ChimeSdk
         }
       }
       unless meeting.meeting_features.nil?
+        # Each feature is returned only when it is configured for the meeting
         meeting_json[:Meeting]["MeetingFeatures"] = {
           "Audio": {
-            "EchoReduction": meeting.meeting_features.audio.echo_reduction
+            "EchoReduction": meeting.meeting_features.audio&.echo_reduction
           },
           "Video": {
-            "MaxResolution": meeting.meeting_features.video.max_resolution
+            "MaxResolution": meeting.meeting_features.video&.max_resolution
           },
           "Content": {
-            "MaxResolution": meeting.meeting_features.content.max_resolution
+            "MaxResolution": meeting.meeting_features.content&.max_resolution
           },
           "Attendee": {
-            "MaxCount": meeting.meeting_features.attendee.max_count
+            "MaxCount": meeting.meeting_features.attendee&.max_count
           }
         }
       end
